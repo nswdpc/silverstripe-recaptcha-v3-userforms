@@ -2,6 +2,8 @@
 
 This module provides a userforms reCAPTCHAv3 field with configurable action and score
 
+![settings](./docs/settings.png)
+
 ## Configuration
 
 All configuration happens in the `nswdpc/silverstripe-recaptcha-v3` module.
@@ -10,7 +12,11 @@ Once a field is added to your user defined form, a score and action can be added
 
 ## Requirements
 
-See [composer.json](./composer.json)
++ [nswdpc/silverstripe-recaptcha-v3](https://github.com/nswdpc/silverstripe-recaptcha-v3)
++ [firesphere/rangefield](https://github.com/Firesphere/silverstripe-rangefield)
++ [silverstripe/userforms](https://github.com/silverstripe/silverstripe-userforms)
+
+See [composer.json](./composer.json) for details
 
 ## Installation
 
