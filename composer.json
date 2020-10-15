@@ -28,11 +28,6 @@
         "phpunit/phpunit": "^5.7",
         "squizlabs/php_codesniffer": "^3.0"
     },
-    "extra": {
-        "expose": [
-            "client/dist"
-        ]
-    },
     "repositories": [
         {
             "type": "vcs",
