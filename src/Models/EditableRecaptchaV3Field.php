@@ -2,10 +2,10 @@
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\UserForms\Model\EditableFormField;
 use SilverStripe\Control\Controller;
-use Firesphere\RangeField\RangeField;
 
 /**
  * EditableRecaptchaV3Field
@@ -90,21 +90,21 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
-     * return range e.g for {@link Firesphere\RangeField\RangeField}
+     * Return range of allowed thresholds
      * @return array
      */
     protected function getRange() {
         $min = 0;
         $max = 100;
         $steps = 5;
-        $i = 0;
+        $i = 5;
         $range = [];
-        $range [ $min ] = $min;
+        $range [ $min ] = $min . " (" . _t(__CLASS__ . ".BLOCK_LESS", "block less") . ")";
         while($i < $max) {
+            $range[ $i ] = $i;
             $i += $steps;
-            $range[ number_format($i, 2) ] = $i;
         }
-        $range [ $max ] = $max;
+        $range [ $max ] = $max . " (" . _t(__CLASS__ . ".BLOCK_MORE", "block more") . ")";
         return $range;
     }
 
@@ -124,24 +124,17 @@ class EditableRecaptchaV3Field extends EditableFormField
             'DisplayRules'// this field is always required, therefore no display rules
         ]);
 
-        $range_field = RangeField::create(
+        $range_field = DropdownField::create(
             'Score',
-            _t( 'NSWDPC\SpamProtection.SCORE_HUMAN', 'Choose a score'),
-            [ $this->Score ]
+            _t( 'NSWDPC\SpamProtection.SCORE_HUMAN', 'Set a threshold. Any submissions receiving a score below this will be blocked.'),
+            $this->getRange(),
+            $this->Score
         )->setDescription(
-            "<br>" .
-            _t( 'NSWDPC\SpamProtection.SCORE_DESCRIPTION_HUMAN',
-            "A submission with a score below the selected value will be allowed.<br>"
-            . ' A submission score of 0 will almost certainly be a valid form submission,'
-            . ' while a submission score of 100 will almost certainly be from an automated form submission')
+            _t(
+                'NSWDPC\SpamProtection.SCORE_DESCRIPTION_HUMAN',
+                "Setting the threshold to 100 will block almost all submissions"
+            )
         );
-        $range_field->setMin(0);
-        $range_field->setMax(100);
-        $range_field->setRange( $this->getRange() );
-        $range_field->setStep(10);
-        $range_field->setSnap(true);
-        $range_field->setDecimalPlaces(0);
-        $range_field->setShowPips(true);
 
         $fields->addFieldsToTab(
                 "Root.Main", [
