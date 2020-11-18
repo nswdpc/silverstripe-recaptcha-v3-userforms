@@ -34,7 +34,6 @@ class EditableRecaptchaV3Field extends EditableFormField
      * @var array
      */
     private static $defaults = [
-        'Score' => 70,
         'Action' => 'submit',
     ];
 
@@ -51,15 +50,9 @@ class EditableRecaptchaV3Field extends EditableFormField
     {
         parent::onBeforeWrite();
 
-        if(!is_numeric($this->Score)) {
-            $this->Score = $this->config()->get('defaults')['Score'];
-        }
-
-        if($this->Score < 0) {
-            $this->Score = 0;
-        }
-        if($this->Score > 100) {
-            $this->Score = 100;
+        // use the default threshold score from config if the saved score is out of bounds
+        if(is_null($this->Score) || $this->Score < 0 || $this->Score > 100) {
+            $this->Score = $this->getDefaultThreshold();
         }
 
         if(!$this->Action) {
@@ -90,6 +83,14 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
+     * Get default threshold score as a float from configuration
+     * @return int
+     */
+    public function getDefaultThreshold() {
+        return RecaptchaV3SpamProtector::getDefaultThreshold();
+    }
+
+    /**
      * Return range of allowed thresholds
      * @return array
      */
@@ -113,7 +114,15 @@ class EditableRecaptchaV3Field extends EditableFormField
             'DisplayRules'// this field is always required, therefore no display rules
         ]);
 
+        // if there is no score yet, use the default
+        if(is_null($this->Score) || $this->Score < 0 || $this->Score > 100) {
+            $this->Score = $this->getDefaultThreshold();
+        }
         $range_field = RecaptchaV3SpamProtector::getRangeField('Score', $this->Score);
+
+        if(!$this->Action) {
+            $this->Action = $this->config()->get('defaults')['Action'];
+        }
 
         $fields->addFieldsToTab(
                 "Root.Main", [
