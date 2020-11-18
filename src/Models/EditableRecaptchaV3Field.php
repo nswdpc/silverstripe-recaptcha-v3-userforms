@@ -94,18 +94,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      * @return array
      */
     protected function getRange() {
-        $min = 0;
-        $max = 100;
-        $steps = 5;
-        $i = 5;
-        $range = [];
-        $range [ $min ] = $min . " (" . _t(__CLASS__ . ".BLOCK_LESS", "block less") . ")";
-        while($i < $max) {
-            $range[ $i ] = $i;
-            $i += $steps;
-        }
-        $range [ $max ] = $max . " (" . _t(__CLASS__ . ".BLOCK_MORE", "block more") . ")";
-        return $range;
+        return RecaptchaV3SpamProtector::getRange();
     }
 
     /**
@@ -124,17 +113,7 @@ class EditableRecaptchaV3Field extends EditableFormField
             'DisplayRules'// this field is always required, therefore no display rules
         ]);
 
-        $range_field = DropdownField::create(
-            'Score',
-            _t( 'NSWDPC\SpamProtection.SCORE_HUMAN', 'Set a threshold. Any submissions receiving a score below this will be blocked.'),
-            $this->getRange(),
-            $this->Score
-        )->setDescription(
-            _t(
-                'NSWDPC\SpamProtection.SCORE_DESCRIPTION_HUMAN',
-                "Setting the threshold to 100 will block almost all submissions"
-            )
-        );
+        $range_field = RecaptchaV3SpamProtector::getRangeField('Score', $this->Score);
 
         $fields->addFieldsToTab(
                 "Root.Main", [
@@ -143,14 +122,7 @@ class EditableRecaptchaV3Field extends EditableFormField
                         _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
                     ),
                     $range_field,
-                    TextField::create(
-                        'Action',
-                        _t( 'NSWDPC\SpamProtection.ACTION_HUMAN', 'Set a custom action')
-                    )->setDescription(
-                        _t( 'NSWDPC\SpamProtection.ACTION_DESCRIPTION',
-                        'This is used for analytics in the reCAPTCHA console. Allowed characters are \'a-z 0-9 /\' '
-                        . 'and it may not be personally identifiable'))
-
+                    RecaptchaV3SpamProtector::getActionField('Action', $this->Action)
                 ]
         );
         return $fields;
