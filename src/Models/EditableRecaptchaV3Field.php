@@ -1,6 +1,7 @@
 <?php
 namespace NSWDPC\SpamProtection;
 
+use SilverStripe\Forms\CheckBoxField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HeaderField;
@@ -26,7 +27,8 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     private static $db = [
         'Score' => 'Int',// 0-100
-        'Action' => 'Varchar(255)'// custom action
+        'Action' => 'Varchar(255)',// custom action
+        'IncludeInEmails' => 'Boolean'
     ];
 
     /**
@@ -35,6 +37,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     private static $defaults = [
         'Action' => 'submit',
+        'IncludeInEmails' => 0
     ];
 
     /**
@@ -42,6 +45,28 @@ class EditableRecaptchaV3Field extends EditableFormField
      * @var string
      */
     private static $table_name = 'EditableRecaptchaV3Field';
+
+    /**
+     * The reCAPTCHA verification value is always stored
+     * Use the IncludeInEmails value to determine whether the reCAPTCHA value is included in emails
+     * along with being saved to the submitted field
+     * @inheritdoc
+     */
+    public function showInReports()
+    {
+        return true;
+    }
+
+    /**
+     * Return the submitted field instance, with the IncludeInEmails value set as a boolean property
+     * @inheritdoc
+     */
+    public function getSubmittedFormField()
+    {
+        $field = SubmittedRecaptchaV3Field::create();
+        $field->setIncludeValueInEmails( $this->IncludeInEmails == 1 );
+        return $field;
+    }
 
     /**
      * Event handler called before writing to the database.
@@ -131,7 +156,11 @@ class EditableRecaptchaV3Field extends EditableFormField
                         _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
                     ),
                     $range_field,
-                    RecaptchaV3SpamProtector::getActionField('Action', $this->Action)
+                    RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
+                    CheckboxField::create(
+                        'IncludeInEmails',
+                        _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
+                    )
                 ]
         );
         return $fields;

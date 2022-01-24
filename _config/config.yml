@@ -1,0 +1,6 @@
+---
+Name: nswdpc_recaptchav3_userforms
+---
+SilverStripe\UserForms\Control\UserDefinedFormController:
+  extensions:
+    - 'NSWDPC\SpamProtection\UserDefinedFormControllerExtension'
