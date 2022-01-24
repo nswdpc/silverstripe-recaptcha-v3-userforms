@@ -34,7 +34,7 @@ class IncludeInEmailsTask extends BuildTask
     /**
      * @var string
      */
-    private static $segment = 'Recaptchav3IncludeInEmailsTask';
+    private static $segment = 'RecaptchaV3IncludeInEmailsTask';
 
     /**
      * @var string
@@ -43,16 +43,25 @@ class IncludeInEmailsTask extends BuildTask
 
         $before = $request->getVar('before');
         $publish = $request->getVar('publish') == 1;
+        $commit = $request->getVar('commit') == 1;
+
+        if(!$commit) {
+            DB::alteration_message("Pass commit=1 to make changes", "info");
+        }
+        if(!$publish) {
+            DB::alteration_message("Pass publish=1 to publish changes", "info");
+        }
 
         if(!$before) {
             DB::alteration_message("You must provide a date/time as the 'before' param, to update all fields before that date/time. The value is anything understood by DateTime", "error");
+            return;
         }
 
         try {
             $dt = new \DateTime($before);
             $beforeFormatted = $dt->format('Y-m-d');
         } catch(\Exception $e) {
-            DB::alteration_message("Could not understand the before value '{$before}'", "error");\
+            DB::alteration_message("Could not understand the before value '{$before}'", "error");
             return;
         }
 
@@ -65,21 +74,21 @@ class IncludeInEmailsTask extends BuildTask
             return;
         }
 
-        if(!$publish) {
-            DB::alteration_message("Provide publish=1 to change the published field as well", "noop");
-        }
-
         foreach($fields as $field) {
             try {
-                $field->IncludeInEmails = 1;
-                $field->write();
-                DB::alteration_message("Changed field #{$field->ID} {$field->Title}", "changed");
-                if($publish) {
-                    $field->doPublish();
-                    DB::alteration_message("Published field #{$field->ID} {$field->Title}", "changed");
+                if($commit) {
+                    $field->IncludeInEmails = 1;
+                    $field->write();
+                    DB::alteration_message("Changed field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
+                    if($publish) {
+                        $field->doPublish();
+                        DB::alteration_message("Published field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
+                    }
+                } else {
+                    DB::alteration_message("Would have changed field #{$field->ID} '{$field->Title}', created:{$field->Created}", "info");
                 }
             } catch (\Exception $e) {
-                DB::alteration_message("Failed to change field #{$field->ID} {$field->Title}. Error:{$e->getMessage()}", "error");
+                DB::alteration_message("Failed to change field #{$field->ID} '{$field->Title}', created:{$field->Created}. Error:{$e->getMessage()}", "error");
             }
         }
     }
