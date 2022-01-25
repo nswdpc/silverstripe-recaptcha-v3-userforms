@@ -10,7 +10,7 @@ use SilverStripe\Dev\SapphireTest;
  * Test the EditableRecaptchaV3Field
  * @author James
  */
-class Recaptchav3FieldTest extends SapphireTest
+class EditableRecaptchav3FieldTest extends SapphireTest
 {
 
     protected $usesDatabase = false;

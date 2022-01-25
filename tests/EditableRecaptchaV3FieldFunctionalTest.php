@@ -15,9 +15,9 @@ use SilverStripe\UserForms\Model\UserDefinedForm;
 /**
  * @package userforms
  */
-class Recaptchav3FieldFunctionalTest extends FunctionalTest
+class EditableRecaptchav3FieldFunctionalTest extends FunctionalTest
 {
-    protected static $fixture_file = 'RecaptchaV3FieldFunctionalTest.yml';
+    protected static $fixture_file = 'EditableRecaptchaV3FieldFunctionalTest.yml';
 
     protected static $use_draft_site = false;
 
@@ -55,18 +55,19 @@ class Recaptchav3FieldFunctionalTest extends FunctionalTest
     public function testProcessIncludeInEmails()
     {
 
+        // and test verifier
+        Injector::inst()->registerService(
+            new TestVerifier(), Verifier::class
+        );
+
         $field = new TestRecaptchaV3Field('include_in_emails');
-        $field->setIsSuccess(true);
+        // emulate human verification
+        $field->getVerifier()->setIsHuman(true);
 
         // use the test field
         Injector::inst()->registerService(
             $field,
             RecaptchaV3Field::class
-        );
-
-        // and test verifier
-        Injector::inst()->registerService(
-            new TestVerifier(), Verifier::class
         );
 
         $userDefinedForm = $this->setupFormFrontend('include-in-emails');
@@ -128,18 +129,20 @@ class Recaptchav3FieldFunctionalTest extends FunctionalTest
     }
 
     public function testProcessNotIncludeInEmails() {
+
+        // and test verifier
+        Injector::inst()->registerService(
+            new TestVerifier(), Verifier::class
+        );
+
         $field = new TestRecaptchaV3Field('not_include_in_emails');
-        $field->setIsSuccess(true);
+        // emulate human verification
+        $field->getVerifier()->setIsHuman(true);
 
         // use the test field
         Injector::inst()->registerService(
             $field,
             RecaptchaV3Field::class
-        );
-
-        // and test verifier
-        Injector::inst()->registerService(
-            new TestVerifier(), Verifier::class
         );
 
         $userDefinedForm = $this->setupFormFrontend('not-include-in-emails');
