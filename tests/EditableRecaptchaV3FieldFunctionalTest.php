@@ -13,27 +13,31 @@ use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
 use SilverStripe\UserForms\Model\UserDefinedForm;
 
 /**
- * @package userforms
+ * Functional tests for {@link NSWDPC\SpamProtection\EditableRecaptchaV3Field}
+ * @author James
  */
 class EditableRecaptchav3FieldFunctionalTest extends FunctionalTest
 {
+
+    /**
+     * @var string
+     */
     protected static $fixture_file = 'EditableRecaptchaV3FieldFunctionalTest.yml';
 
+    /**
+     * @var bool
+     */
     protected static $use_draft_site = false;
 
+    /**
+     * @var bool
+     */
     protected static $disable_themes = true;
 
+    /**
+     * @var bool
+     */
     protected $usesDatabase = true;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
 
     /**
      * Publish a form for use on the frontend
@@ -52,17 +56,21 @@ class EditableRecaptchav3FieldFunctionalTest extends FunctionalTest
         return $form;
     }
 
+    /**
+     * Functional test for IncludeInEmails=1 value
+     */
     public function testProcessIncludeInEmails()
     {
 
         // and test verifier
+        $verifier = TestVerifier::create();
+        $verifier->setIsHuman(true);
         Injector::inst()->registerService(
-            new TestVerifier(), Verifier::class
+            $verifier, Verifier::class
         );
 
-        $field = new TestRecaptchaV3Field('include_in_emails');
-        // emulate human verification
-        $field->getVerifier()->setIsHuman(true);
+        $field = TestRecaptchaV3Field::create('include_in_emails');
+        $field->setVerifier($verifier);
 
         // use the test field
         Injector::inst()->registerService(
@@ -128,16 +136,20 @@ class EditableRecaptchav3FieldFunctionalTest extends FunctionalTest
 
     }
 
+    /**
+     * Functional test for IncludeInEmails=0 value
+     */
     public function testProcessNotIncludeInEmails() {
 
         // and test verifier
+        $verifier = TestVerifier::create();
+        $verifier->setIsHuman(true);
         Injector::inst()->registerService(
-            new TestVerifier(), Verifier::class
+            $verifier, Verifier::class
         );
 
-        $field = new TestRecaptchaV3Field('not_include_in_emails');
-        // emulate human verification
-        $field->getVerifier()->setIsHuman(true);
+        $field = TestRecaptchaV3Field::create('not_include_in_emails');
+        $field->setVerifier($verifier);
 
         // use the test field
         Injector::inst()->registerService(

@@ -7,17 +7,16 @@ use NSWDPC\SpamProtection\SubmittedRecaptchaV3Field;
 use SilverStripe\Dev\SapphireTest;
 
 /**
- * Test the EditableRecaptchaV3Field
+ * Tests for the {@link NSWDPC\SpamProtection\EditableRecaptchaV3Field}
  * @author James
  */
 class EditableRecaptchav3FieldTest extends SapphireTest
 {
 
+    /**
+     * @var bool
+     */
     protected $usesDatabase = false;
-
-    public function setUp() {
-        parent::setUp();
-    }
 
     /**
      * Test field value inclusion/exclusion
