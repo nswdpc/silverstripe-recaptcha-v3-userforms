@@ -15,10 +15,20 @@ use SilverStripe\Control\Controller;
  */
 class EditableRecaptchaV3Field extends EditableFormField
 {
+
+    /**
+     * @var string
+     */
     private static $singular_name = 'reCAPTCHA v3 field';
 
+    /**
+     * @var string
+     */
     private static $plural_name = 'reCAPTCHA v3 fields';
 
+    /**
+     * @var bool
+     */
     private static $has_placeholder = false;
 
     /**
@@ -32,12 +42,29 @@ class EditableRecaptchaV3Field extends EditableFormField
     ];
 
     /**
+     * @var array
+     */
+    private static $has_one = [
+        'Rule' =>  RecaptchaV3Rule::class
+    ];
+
+    /**
      * Add default values to database
      * @var array
      */
     private static $defaults = [
         'Action' => 'submit',
         'IncludeInEmails' => 0
+    ];
+
+    /**
+     * Summary fields
+     * @var array
+     */
+    private static $summary_fields = [
+        'Title' => 'Title',
+        'FieldScore' => 'Threshold',
+        'FieldAction' => 'Action'
     ];
 
     /**
@@ -143,18 +170,26 @@ class EditableRecaptchaV3Field extends EditableFormField
         if(is_null($this->Score) || $this->Score < 0 || $this->Score > 100) {
             $this->Score = $this->getDefaultThreshold();
         }
-        $range_field = RecaptchaV3SpamProtector::getRangeField('Score', $this->Score);
+        $range_field = RecaptchaV3SpamProtector::getRangeCompositeField('Score', $this->Score);
 
         if(!$this->Action) {
             $this->Action = $this->config()->get('defaults')['Action'];
         }
 
+        $fields->findOrMakeTab("Root.reCAPTCHAv3", 'reCAPTCHAv3');
+
         $fields->addFieldsToTab(
-                "Root.Main", [
-                    HeaderField::create(
-                        'reCAPTCHAv3Header',
-                        _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
-                    ),
+                "Root.reCAPTCHAv3", [
+                    DropdownField::create(
+                        'RuleID',
+                        _t( 'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_TITLE', 'Select an existing reCAPTCHAv3 rule.'),
+                        RecaptchaV3Rule::getEnabledRules()->map('ID', 'TagDetailed')
+                    )->setDescription(
+                        _t(
+                            'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_DESCRIPTION',
+                            'This will take precedence over the threshold and custom action, if provided below'
+                        )
+                    )->setEmptyString(''),
                     $range_field,
                     RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
                     CheckboxField::create(
@@ -167,20 +202,64 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
+     * Return the threshold score from either the Rule or the field here
+     * @return int
+     */
+    public function getFieldScore() : int {
+        if(!$this->exists()) {
+            $score = $this->getDefaultThreshold();
+        } else {
+            $rule = $this->Rule();
+            if($rule && $rule->exists() && $rule->Enabled) {
+                $score = $rule->Score;
+            } else {
+                $score = $this->Score;
+            }
+        }
+        return $score;
+    }
+
+    /**
+     * Return the action from either the Rule or the field here
+     * @return string
+     */
+    public function getFieldAction() : string {
+        if(!$this->exists()) {
+            $action = '';
+        } else {
+            $rule = $this->Rule();
+            if($rule && $rule->exists() && $rule->Enabled) {
+                $action = $rule->Action;
+            } else {
+                $action = $this->Action;
+            }
+        }
+        return $action;
+    }
+
+    /**
      * Return the form field with configured score and action
      * @return RecaptchaV3Field
      */
     public function getFormField()
     {
         $parent_form_identifier = "";
-        if($parent = $this->Parent()) {
+        if( ($parent = $this->Parent()) && !empty($parent->URLSegment)) {
             $parent_form_identifier = $parent->URLSegment;
         }
         $field_template = EditableRecaptchaV3Field::class;
         $field_holder_template = EditableRecaptchaV3Field::class . '_holder';
+        // the score used as a threshold
+        $score = $this->getFieldScore();
+        $score = round( ($score / 100), 2);
+        // the action
+        $action = $this->getFieldAction();
+        if(strpos($action, "/") === false) {
+            $action = $parent_form_identifier . "/" . $action;
+        }
         $field = RecaptchaV3Field::create($this->Name, $this->Title)
-            ->setScore( round( ($this->Score / 100), 2) ) // format for the reCAPTCHA API 0.00->1.00
-            ->setExecuteAction($parent_form_identifier . "/" . $this->Action, true)
+            ->setScore($score) // format for the reCAPTCHA API 0.00->1.00
+            ->setExecuteAction($action, true)
             ->setFieldHolderTemplate($field_holder_template)
             ->setTemplate($field_template);
         $this->doUpdateFormField($field);

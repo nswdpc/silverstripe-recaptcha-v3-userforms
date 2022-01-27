@@ -4,3 +4,6 @@ Name: nswdpc_recaptchav3_userforms
 SilverStripe\UserForms\Control\UserDefinedFormController:
   extensions:
     - 'NSWDPC\SpamProtection\UserDefinedFormControllerExtension'
+NSWDPC\SpamProtection\RecaptchaV3Rule:
+  extensions:
+    - 'NSWDPC\SpamProtection\RecaptchaV3RuleExtension'
