@@ -202,6 +202,18 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
+     * Return the Rule, if enabled, or NULL if not
+     * @return RecaptchaV3Rule|null
+     */
+    public function getEnabledRule() {
+        $rule = $this->Rule;
+        if($rule && $rule->exists() && $rule->Enabled) {
+            return $rule;
+        }
+        return null;
+    }
+
+    /**
      * Return the threshold score from either the Rule or the field here
      * @return int
      */
@@ -209,12 +221,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         if(!$this->exists()) {
             $score = $this->getDefaultThreshold();
         } else {
-            $rule = $this->Rule();
-            if($rule && $rule->exists() && $rule->Enabled) {
-                $score = $rule->Score;
-            } else {
-                $score = $this->Score;
-            }
+            $score = $this->Score;
         }
         return $score;
     }
@@ -227,12 +234,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         if(!$this->exists()) {
             $action = '';
         } else {
-            $rule = $this->Rule();
-            if($rule && $rule->exists() && $rule->Enabled) {
-                $action = $rule->Action;
-            } else {
-                $action = $this->Action;
-            }
+            $action = $this->Action;
         }
         return $action;
     }
@@ -243,6 +245,10 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     public function getFormField()
     {
+
+        // rule for this field. If set, overrides Score/Action set
+        $rule = $this->getEnabledRule();
+
         $parent_form_identifier = "";
         if( ($parent = $this->Parent()) && !empty($parent->URLSegment)) {
             $parent_form_identifier = $parent->URLSegment;
@@ -262,6 +268,9 @@ class EditableRecaptchaV3Field extends EditableFormField
             ->setExecuteAction($action, true)
             ->setFieldHolderTemplate($field_holder_template)
             ->setTemplate($field_template);
+        if($rule) {
+            $field = $field->setRecaptchaV3RuleTag( $rule->Tag );
+        }
         $this->doUpdateFormField($field);
         return $field;
     }
