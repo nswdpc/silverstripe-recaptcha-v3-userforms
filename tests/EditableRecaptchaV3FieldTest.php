@@ -10,7 +10,7 @@ use SilverStripe\Dev\SapphireTest;
  * Tests for the {@link NSWDPC\SpamProtection\EditableRecaptchaV3Field}
  * @author James
  */
-class EditableRecaptchav3FieldTest extends SapphireTest
+class EditableRecaptchaV3FieldTest extends SapphireTest
 {
 
     /**
