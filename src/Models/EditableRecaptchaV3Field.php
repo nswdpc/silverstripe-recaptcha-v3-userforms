@@ -156,7 +156,7 @@ class EditableRecaptchaV3Field extends EditableFormField
                 RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
                 CheckboxField::create(
                     'IncludeInEmails',
-                    _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
+                    _t( 'NSWDPC\SpamProtection.INCLUDE_CAPTCHA_RESULT_IN_EMAILS', 'Include captcha result in recipient emails')
                 )
             )->setTitle(
                 _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
