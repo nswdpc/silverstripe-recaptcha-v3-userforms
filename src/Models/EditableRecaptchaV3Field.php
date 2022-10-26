@@ -2,9 +2,9 @@
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Forms\CheckBoxField;
+use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\HeaderField;
 use SilverStripe\UserForms\Model\EditableFormField;
 use SilverStripe\Control\Controller;
 
@@ -149,19 +149,18 @@ class EditableRecaptchaV3Field extends EditableFormField
             $this->Action = $this->config()->get('defaults')['Action'];
         }
 
-        $fields->addFieldsToTab(
-                "Root.Main", [
-                    HeaderField::create(
-                        'reCAPTCHAv3Header',
-                        _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
-                    ),
-                    $range_field,
-                    RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
-                    CheckboxField::create(
-                        'IncludeInEmails',
-                        _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
-                    )
-                ]
+        $fields->addFieldToTab(
+            "Root.Main",
+            CompositeField::create(
+                $range_field,
+                RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
+                CheckboxField::create(
+                    'IncludeInEmails',
+                    _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
+                )
+            )->setTitle(
+                _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
+            )
         );
         return $fields;
     }
