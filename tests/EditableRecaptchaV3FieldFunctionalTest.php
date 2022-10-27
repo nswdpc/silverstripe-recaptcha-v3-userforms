@@ -19,7 +19,7 @@ use SilverStripe\Security\SecurityToken;
  * Functional tests for {@link NSWDPC\SpamProtection\EditableRecaptchaV3Field}
  * @author James
  */
-class EditableRecaptchav3FieldFunctionalTest extends FunctionalTest
+class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 {
 
     /**

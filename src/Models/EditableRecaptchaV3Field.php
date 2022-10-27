@@ -2,9 +2,9 @@
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Forms\CheckBoxField;
+use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\HeaderField;
 use SilverStripe\UserForms\Model\EditableFormField;
 use SilverStripe\Control\Controller;
 
@@ -179,24 +179,38 @@ class EditableRecaptchaV3Field extends EditableFormField
         $fields->findOrMakeTab("Root.reCAPTCHAv3", 'reCAPTCHAv3');
 
         $fields->addFieldsToTab(
-                "Root.reCAPTCHAv3", [
-                    DropdownField::create(
-                        'RuleID',
-                        _t( 'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_TITLE', 'Select an existing reCAPTCHAv3 rule.'),
-                        RecaptchaV3Rule::getEnabledRules()->map('ID', 'TagDetailed')
-                    )->setDescription(
-                        _t(
-                            'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_DESCRIPTION',
-                            'This will take precedence over the threshold and custom action, if provided below'
-                        )
-                    )->setEmptyString(''),
-                    $range_field,
-                    RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
-                    CheckboxField::create(
-                        'IncludeInEmails',
-                        _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
+            "Root.reCAPTCHAv3", [
+                DropdownField::create(
+                    'RuleID',
+                    _t( 'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_TITLE', 'Select an existing reCAPTCHAv3 rule.'),
+                    RecaptchaV3Rule::getEnabledRules()->map('ID', 'TagDetailed')
+                )->setDescription(
+                    _t(
+                        'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_DESCRIPTION',
+                        'This will take precedence over the threshold and custom action, if provided below'
                     )
-                ]
+                )->setEmptyString(''),
+                $range_field,
+                RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
+                CheckboxField::create(
+                    'IncludeInEmails',
+                    _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
+                )
+            ]
+        );
+
+        $fields->addFieldToTab(
+            "Root.Main",
+            CompositeField::create(
+                $range_field,
+                RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
+                CheckboxField::create(
+                    'IncludeInEmails',
+                    _t( 'NSWDPC\SpamProtection.INCLUDE_CAPTCHA_RESULT_IN_EMAILS', 'Include captcha result in recipient emails')
+                )
+            )->setTitle(
+                _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
+            )
         );
         return $fields;
     }
