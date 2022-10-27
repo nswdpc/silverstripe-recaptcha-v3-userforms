@@ -1,9 +1,10 @@
 <?php
 namespace NSWDPC\SpamProtection;
 
+use SilverStripe\Forms\CheckBoxField;
+use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\HeaderField;
 use SilverStripe\UserForms\Model\EditableFormField;
 use SilverStripe\Control\Controller;
 
@@ -26,7 +27,8 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     private static $db = [
         'Score' => 'Int',// 0-100
-        'Action' => 'Varchar(255)'// custom action
+        'Action' => 'Varchar(255)',// custom action
+        'IncludeInEmails' => 'Boolean'
     ];
 
     /**
@@ -35,6 +37,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     private static $defaults = [
         'Action' => 'submit',
+        'IncludeInEmails' => 0
     ];
 
     /**
@@ -42,6 +45,28 @@ class EditableRecaptchaV3Field extends EditableFormField
      * @var string
      */
     private static $table_name = 'EditableRecaptchaV3Field';
+
+    /**
+     * The reCAPTCHA verification value is always stored
+     * Use the IncludeInEmails value to determine whether the reCAPTCHA value is included in emails
+     * along with being saved to the submitted field
+     * @inheritdoc
+     */
+    public function showInReports()
+    {
+        return true;
+    }
+
+    /**
+     * Return the submitted field instance, with the IncludeInEmails value set as a boolean property
+     * @inheritdoc
+     */
+    public function getSubmittedFormField()
+    {
+        $field = SubmittedRecaptchaV3Field::create();
+        $field->setIncludeValueInEmails( $this->IncludeInEmails == 1 );
+        return $field;
+    }
 
     /**
      * Event handler called before writing to the database.
@@ -124,15 +149,18 @@ class EditableRecaptchaV3Field extends EditableFormField
             $this->Action = $this->config()->get('defaults')['Action'];
         }
 
-        $fields->addFieldsToTab(
-                "Root.Main", [
-                    HeaderField::create(
-                        'reCAPTCHAv3Header',
-                        _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
-                    ),
-                    $range_field,
-                    RecaptchaV3SpamProtector::getActionField('Action', $this->Action)
-                ]
+        $fields->addFieldToTab(
+            "Root.Main",
+            CompositeField::create(
+                $range_field,
+                RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
+                CheckboxField::create(
+                    'IncludeInEmails',
+                    _t( 'NSWDPC\SpamProtection.INCLUDE_CAPTCHA_RESULT_IN_EMAILS', 'Include captcha result in recipient emails')
+                )
+            )->setTitle(
+                _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
+            )
         );
         return $fields;
     }
