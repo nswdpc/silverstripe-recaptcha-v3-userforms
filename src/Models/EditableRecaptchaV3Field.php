@@ -205,20 +205,6 @@ class EditableRecaptchaV3Field extends EditableFormField
                 )
             ]
         );
-
-        $fields->addFieldToTab(
-            "Root.Main",
-            CompositeField::create(
-                $range_field,
-                RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
-                CheckboxField::create(
-                    'IncludeInEmails',
-                    _t( 'NSWDPC\SpamProtection.INCLUDE_CAPTCHA_RESULT_IN_EMAILS', 'Include captcha result in recipient emails')
-                )
-            )->setTitle(
-                _t( 'NSWDPC\SpamProtection.RECAPTCHA_SETTINGS', 'reCAPTCHA v3 settings')
-            )
-        );
         return $fields;
     }
 
