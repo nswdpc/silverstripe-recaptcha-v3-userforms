@@ -47,6 +47,9 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
 
         $rule = $formField->getRecaptchaV3Rule();
         $this->assertEmpty($rule, "No rule for field");
+
+        $template = $formField->forTemplate()->RAW();
+        $this->assertStringNotContainsString("data-rule=\"", $template);
     }
 
     /**
@@ -92,6 +95,10 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
 
         $foundRule = $formField->getRecaptchaV3Rule();
         $this->assertEquals($rule->ID, $foundRule->ID, "Rule matches");
+
+
+        $template = $formField->forTemplate()->RAW();
+        $this->assertStringContainsString("data-rule=\"{$rule->ID}\"", $template);
     }
 
     /**
