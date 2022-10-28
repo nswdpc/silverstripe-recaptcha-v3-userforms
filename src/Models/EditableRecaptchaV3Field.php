@@ -19,12 +19,12 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * @var string
      */
-    private static $singular_name = 'reCAPTCHA v3 field';
+    private static $singular_name = 'Captcha field';
 
     /**
      * @var string
      */
-    private static $plural_name = 'reCAPTCHA v3 fields';
+    private static $plural_name = 'Captcha fields';
 
     /**
      * @var bool
@@ -124,7 +124,7 @@ class EditableRecaptchaV3Field extends EditableFormField
 
         // always require a default title
         if(!$this->Title) {
-            $this->Title = _t( 'NSWDPC\SpamProtection.RECAPTCHAv3', 'Recaptcha v3');
+            $this->Title = _t( 'NSWDPC\SpamProtection.FORM_SPAM_PROTECTION', 'Form spam protection');
         }
     }
 
@@ -176,13 +176,20 @@ class EditableRecaptchaV3Field extends EditableFormField
             $this->Action = $this->config()->get('defaults')['Action'];
         }
 
-        $fields->findOrMakeTab("Root.reCAPTCHAv3", 'reCAPTCHAv3');
+        $fields->findOrMakeTab(
+            "Root.FormSpam",
+            _t(
+                'NSWDPC\SpamProtection.RECAPTCHA_TAB_NAME',
+               'Form spam'
+
+            )
+        );
 
         $fields->addFieldsToTab(
-            "Root.reCAPTCHAv3", [
+            "Root.FormSpam", [
                 DropdownField::create(
                     'RuleID',
-                    _t( 'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_TITLE', 'Select an existing reCAPTCHAv3 rule.'),
+                    _t( 'NSWDPC\SpamProtection.RECAPTCHA_RULE_SELECT_TITLE', 'Select an existing captcha rule'),
                     RecaptchaV3Rule::getEnabledRules()->map('ID', 'TagDetailed')
                 )->setDescription(
                     _t(
@@ -194,7 +201,7 @@ class EditableRecaptchaV3Field extends EditableFormField
                 RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
                 CheckboxField::create(
                     'IncludeInEmails',
-                    _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include reCAPTCHAv3 verification information in emails')
+                    _t( 'NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include form spam verification information in emails')
                 )
             ]
         );

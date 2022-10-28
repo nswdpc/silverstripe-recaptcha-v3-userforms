@@ -7,7 +7,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use SilverStripe\ORM\DataExtension;
 
 /**
- * Extension to handle email modification
+ * Extension to add EditableRecaptchaV3Fields to a rule
  * @author James
  */
 class RecaptchaV3RuleExtension extends DataExtension {
@@ -19,6 +19,9 @@ class RecaptchaV3RuleExtension extends DataExtension {
         'EditableRecaptchaV3Fields' => EditableRecaptchaV3Field::class
     ];
 
+    /**
+     * Update CMS fields
+     */
     public function updateCmsFields($fields) {
 
         $fields->removeByName('EditableRecaptchaV3Fields');
