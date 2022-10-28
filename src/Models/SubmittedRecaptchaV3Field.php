@@ -1,4 +1,5 @@
 <?php
+
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\UserForms\Model\Submission\SubmittedFormField;
@@ -19,7 +20,8 @@ class SubmittedRecaptchaV3Field extends SubmittedFormField
     /**
      * Setter
      */
-    public function setIncludeValueInEmails(bool $include) {
+    public function setIncludeValueInEmails(bool $include)
+    {
         $this->includeValueInEmails = $include;
         return $this;
     }
@@ -27,7 +29,8 @@ class SubmittedRecaptchaV3Field extends SubmittedFormField
     /**
      * Getter
      */
-    public function getIncludeValueInEmails() : bool {
+    public function getIncludeValueInEmails() : bool
+    {
         return $this->includeValueInEmails;
     }
 }

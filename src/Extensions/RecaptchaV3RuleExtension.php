@@ -10,7 +10,8 @@ use SilverStripe\ORM\DataExtension;
  * Extension to add EditableRecaptchaV3Fields to a rule
  * @author James
  */
-class RecaptchaV3RuleExtension extends DataExtension {
+class RecaptchaV3RuleExtension extends DataExtension
+{
 
     /**
      * @var array
@@ -22,8 +23,8 @@ class RecaptchaV3RuleExtension extends DataExtension {
     /**
      * Update CMS fields
      */
-    public function updateCmsFields($fields) {
-
+    public function updateCmsFields($fields)
+    {
         $fields->removeByName('EditableRecaptchaV3Fields');
         $field = GridField::create(
             'EditableRecaptchaV3Fields',
@@ -31,14 +32,13 @@ class RecaptchaV3RuleExtension extends DataExtension {
             $this->owner->EditableRecaptchaV3Fields()
         );
         $config = new GridFieldConfig_RecordViewer();
-        $field->setConfig( $config );
+        $field->setConfig($config);
 
-        if($field) {
+        if ($field) {
             $fields->addFieldsToTab(
                 'Root.FormFields',
                 $field
             );
         }
     }
-
 }

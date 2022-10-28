@@ -19,7 +19,8 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
      */
     protected $usesDatabase = false;
 
-    public function testDefaultBadgePlacement() {
+    public function testDefaultBadgePlacement()
+    {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_DEFAULT);
         $field = EditableRecaptchaV3Field::create([
             'Score' => 50,
@@ -32,12 +33,13 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
 
         $template = $field->getFormField()->FieldHolder()->forTemplate();
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
+        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
+        $this->assertTrue(strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
     }
 
-    public function testFieldBadgePlacement() {
+    public function testFieldBadgePlacement()
+    {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_FIELD);
         $field = EditableRecaptchaV3Field::create([
             'Score' => 60,
@@ -48,12 +50,13 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
 
         $template = $field->getFormField()->FieldHolder()->forTemplate();
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/privacy") !== false, "Recaptcha policy link in template");
+        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") !== false, "Recaptcha policy link in template");
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/terms") !== false, "Recaptcha T&C link in template");
+        $this->assertTrue(strpos($template, "https://policies.google.com/terms") !== false, "Recaptcha T&C link in template");
     }
 
-    public function testFormBadgePlacement() {
+    public function testFormBadgePlacement()
+    {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_FORM);
         $field = EditableRecaptchaV3Field::create([
             'Score' => 20,
@@ -64,13 +67,13 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
 
         $template = $field->getFormField()->FieldHolder()->forTemplate();
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
+        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
-
+        $this->assertTrue(strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
     }
 
-    public function testPageBadgePlacement() {
+    public function testPageBadgePlacement()
+    {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_PAGE);
         $field = EditableRecaptchaV3Field::create([
             'Score' => 40,
@@ -81,9 +84,8 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
 
         $template = $field->getFormField()->FieldHolder()->forTemplate();
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
+        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
 
-        $this->assertTrue( strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
-
+        $this->assertTrue(strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
     }
 }

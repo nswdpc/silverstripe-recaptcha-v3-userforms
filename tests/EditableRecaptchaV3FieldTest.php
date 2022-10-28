@@ -23,8 +23,8 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field return from getFormField
      */
-    public function testGetFormField() {
-
+    public function testGetFormField()
+    {
         $fieldScore = 32;
         $fieldAction = "testgetformfield/submit";
 
@@ -55,8 +55,8 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field return from getFormField when the field has a rule
      */
-    public function testGetFormFieldWithRule() {
-
+    public function testGetFormFieldWithRule()
+    {
         $fieldScore = 32;
         $fieldAction = "testgetformfield/submit";
         $ruleTag = "testruletag";
@@ -111,14 +111,11 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $field->IncludeInEmails = 1;
 
         $submittedField = $field->getSubmittedFormField();
-        $this->assertTrue( $submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be true when IncludeInEmails=1" );
+        $this->assertTrue($submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be true when IncludeInEmails=1");
 
         $field->IncludeInEmails = 0;
 
         $submittedField = $field->getSubmittedFormField();
-        $this->assertFalse( $submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be false when IncludeInEmails=0" );
+        $this->assertFalse($submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be false when IncludeInEmails=0");
     }
-
-
-
 }
