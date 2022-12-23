@@ -4,8 +4,7 @@ namespace NSWDPC\SpamProtection;
 use SilverStripe\UserForms\Model\Submission\SubmittedFormField;
 
 /**
- * SubmittedRecaptchaV3Field
- * Used to allow determination of whether a value is a recaptcha score
+ * The submitted value of an EditableRecaptchaV3Field
  * @author James
  */
 class SubmittedRecaptchaV3Field extends SubmittedFormField
