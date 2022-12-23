@@ -1,14 +1,14 @@
-# Silverstripe reCAPTCHA v3 field for userforms
+# Silverstripe captcha field for userforms
 
-This module provides a userforms reCAPTCHAv3 field with configurable action and score
+This module provides userforms captcha fields with support for Google's reCAPTCHAv3 and Cloudflare's Turnstile services.
 
 ![settings](./docs/settings.png)
 
 ## Configuration
 
-All configuration happens in the [nswdpc/silverstripe-recaptcha-v3](https://github.com/nswdpc/silverstripe-recaptcha-v3) module.
+All site configuration happens in the [nswdpc/silverstripe-recaptcha-v3](https://github.com/nswdpc/silverstripe-recaptcha-v3) module.
 
-Once a field is added to your user defined form, a score and action can be added to it.
+After configuration, editors with relevant permissions can create a field in the CMS and set a score (if supported) or custom action for analytics.
 
 ## Requirements
 
