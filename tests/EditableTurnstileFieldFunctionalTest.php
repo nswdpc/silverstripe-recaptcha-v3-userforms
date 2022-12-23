@@ -2,13 +2,14 @@
 
 namespace NSWDPC\SpamProtection\Tests;
 
-use NSWDPC\SpamProtection\Tests\Support\TestRecaptchaV3Verifier;
-use NSWDPC\SpamProtection\Tests\Support\TestRecaptchaV3Field;
+use NSWDPC\SpamProtection\Tests\Support\TestTurnstileVerifier;
+use NSWDPC\SpamProtection\Tests\Support\TestTurnstileField;
 use NSWDPC\SpamProtection\Verifier;
-use NSWDPC\SpamProtection\RecaptchaV3Verifier;
-use NSWDPC\SpamProtection\RecaptchaV3Field;
-use NSWDPC\SpamProtection\EditableRecaptchaV3Field;
-use NSWDPC\SpamProtection\SubmittedRecaptchaV3Field;
+use NSWDPC\SpamProtection\TurnstileVerifier;
+use NSWDPC\SpamProtection\TurnstileField;
+use NSWDPC\SpamProtection\TurnstileTokenResponse;
+use NSWDPC\SpamProtection\EditableTurnstileField;
+use NSWDPC\SpamProtection\SubmittedTurnstileField;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\UserForms\Control\UserDefinedFormController;
 use SilverStripe\Dev\FunctionalTest;
@@ -16,16 +17,16 @@ use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
 use SilverStripe\UserForms\Model\UserDefinedForm;
 
 /**
- * Functional tests for {@link NSWDPC\SpamProtection\EditableRecaptchaV3Field}
+ * Functional tests for {@link NSWDPC\SpamProtection\EditableTurnstileField}
  * @author James
  */
-class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
+class EditableTurnstileFieldFunctionalTest extends FunctionalTest
 {
 
     /**
      * @var string
      */
-    protected static $fixture_file = 'EditableRecaptchaV3FieldFunctionalTest.yml';
+    protected static $fixture_file = 'EditableTurnstileFieldFunctionalTest.yml';
 
     /**
      * @var bool
@@ -66,19 +67,19 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
     {
 
         // and test verifier
-        $verifier = TestRecaptchaV3Verifier::create();
+        $verifier = TestTurnstileVerifier::create();
         $verifier->setIsHuman(true);
         Injector::inst()->registerService(
-            $verifier, RecaptchaV3Verifier::class
+            $verifier, TurnstileVerifier::class
         );
 
-        $field = TestRecaptchaV3Field::create('include_in_emails');
+        $field = TestTurnstileField::create('include_in_emails');
         $field->setVerifier($verifier);
 
         // use the test field
         Injector::inst()->registerService(
             $field,
-            RecaptchaV3Field::class
+            TurnstileField::class
         );
 
         $userDefinedForm = $this->setupFormFrontend('include-in-emails');
@@ -104,14 +105,14 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $captchaField = $form->HiddenFields()->fieldByName('include_in_emails');
 
-        $this->assertInstanceOf( TestRecaptchaV3Field::class, $captchaField, "include_in_emails is a TestRecaptchaV3Field" );
+        $this->assertInstanceOf( TestTurnstileField::class, $captchaField, "include_in_emails is a TestTurnstileField" );
 
         $data = [];
         $response = $this->submitForm('UserForm_Form_' . $userDefinedForm->ID, null, $data);
 
-        $submittedFields = SubmittedRecaptchaV3Field::get()->filter(['Name' => 'include_in_emails']);
+        $submittedFields = SubmittedTurnstileField::get()->filter(['Name' => 'include_in_emails']);
 
-        $this->assertTrue($submittedFields->count() == 1, "One SubmittedRecaptchaV3Field for include_in_emails");
+        $this->assertTrue($submittedFields->count() == 1, "One SubmittedTurnstileField for include_in_emails, got " . $submittedFields->count());
 
         $submittedField = $submittedFields->first();
 
@@ -124,9 +125,12 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $decodedValue = json_decode($value, true);
 
         $this->assertNotEmpty($decodedValue);
-        $this->assertEquals( TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE);
         $this->assertEquals( 'localhost',  $decodedValue['hostname'], "Hostname is localhost");
-        $this->assertEquals( 'includevalueinemails/functionaltest',  $decodedValue['action'], "Action is includevalueinemails/functionaltest");
+
+        $captchaAction = 'includevalueinemails_functionaltest';
+        $expectedCaptchaAction = TurnstileTokenResponse::formatAction($captchaAction);
+
+        $this->assertEquals( $expectedCaptchaAction,  $decodedValue['action'], "Action is {$expectedCaptchaAction}");
 
         $email = $this->findEmail( $recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject );
 
@@ -145,19 +149,19 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
     public function testProcessNotIncludeInEmails() {
 
         // and test verifier
-        $verifier = TestRecaptchaV3Verifier::create();
+        $verifier = TestTurnstileVerifier::create();
         $verifier->setIsHuman(true);
         Injector::inst()->registerService(
-            $verifier, RecaptchaV3Verifier::class
+            $verifier, TurnstileVerifier::class
         );
 
-        $field = TestRecaptchaV3Field::create('not_include_in_emails');
+        $field = TestTurnstileField::create('not_include_in_emails');
         $field->setVerifier($verifier);
 
         // use the test field
         Injector::inst()->registerService(
             $field,
-            RecaptchaV3Field::class
+            TurnstileField::class
         );
 
         $userDefinedForm = $this->setupFormFrontend('not-include-in-emails');
@@ -183,14 +187,14 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $captchaField = $form->HiddenFields()->fieldByName('not_include_in_emails');
 
-        $this->assertInstanceOf( TestRecaptchaV3Field::class, $captchaField, "not_include_in_emails is a TestRecaptchaV3Field" );
+        $this->assertInstanceOf( TestTurnstileField::class, $captchaField, "not_include_in_emails is a TestTurnstileField" );
 
         $data = [];
         $response = $this->submitForm('UserForm_Form_' . $userDefinedForm->ID, null, $data);
 
-        $submittedFields = SubmittedRecaptchaV3Field::get()->filter(['Name' => 'not_include_in_emails']);
+        $submittedFields = SubmittedTurnstileField::get()->filter(['Name' => 'not_include_in_emails']);
 
-        $this->assertTrue($submittedFields->count() == 1, "One SubmittedRecaptchaV3Field for not_include_in_emails");
+        $this->assertTrue($submittedFields->count() == 1, "One SubmittedTurnstileField for not_include_in_emails");
 
         $submittedField = $submittedFields->first();
 
@@ -203,9 +207,12 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $decodedValue = json_decode($value, true);
 
         $this->assertNotEmpty($decodedValue);
-        $this->assertEquals( TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE);
         $this->assertEquals( 'localhost',  $decodedValue['hostname'], "Hostname is localhost");
-        $this->assertEquals( 'notincludevalueinemails/functionaltest',  $decodedValue['action'], "Action is notincludevalueinemails/functionaltest");
+
+        $captchaAction = 'notincludevalueinemails_functionaltest';
+        $expectedCaptchaAction = TurnstileTokenResponse::formatAction($captchaAction);
+
+        $this->assertEquals( $expectedCaptchaAction,  $decodedValue['action'], "Action is {$expectedCaptchaAction}");
 
         $email = $this->findEmail( $recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject );
 

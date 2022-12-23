@@ -1,0 +1,50 @@
+# Turnstile fixture, based on UserDefinedForm.yml
+SilverStripe\UserForms\Model\Recipient\EmailRecipient:
+  recipient-include:
+    EmailAddress: test.include@example.com
+    EmailSubject: 'Include: test form submission for Turnstile test'
+    EmailFrom: no-reply@example.com
+    EmailBodyHtml: 'INCLUDE_IN_EMAILS'
+  recipient-not-include:
+    EmailAddress: test.notinclude@example.com
+    EmailSubject: 'Not include: test form submission for Turnstile test'
+    EmailFrom: no-reply@example.com
+    EmailBodyHtml: 'NOT_INCLUDE_IN_EMAILS'
+
+SilverStripe\UserForms\Model\EditableFormField\EditableFormStep:
+  include-in-emails-step1:
+    Title: 'Include Step 1'
+  not-include-in-emails-step1:
+    Title: 'Not include Step 1'
+
+NSWDPC\SpamProtection\EditableTurnstileField:
+  include-in-emails:
+    Name: include_in_emails
+    Title: Include value in emails
+    IncludeInEmails: 1
+    Action: functionaltest
+    Score: null
+  not-include-in-emails:
+    Name: not_include_in_emails
+    Title: Not include value in emails
+    IncludeInEmails: 0
+    Action: functionaltest
+    Score: null
+
+SilverStripe\UserForms\Model\UserDefinedForm:
+  include-in-emails:
+    Content: '<p>Form test: Include in emails</p>'
+    Title: Include in emails
+    Fields:
+      - =>SilverStripe\UserForms\Model\EditableFormField\EditableFormStep.include-in-emails-step1
+      - =>NSWDPC\SpamProtection\EditableTurnstileField.include-in-emails
+    EmailRecipients:
+      - =>SilverStripe\UserForms\Model\Recipient\EmailRecipient.recipient-include
+  not-include-in-emails:
+    Content: '<p>Form test: Do not include in emails</p>'
+    Title: Not include in emails
+    Fields:
+      - =>SilverStripe\UserForms\Model\EditableFormField\EditableFormStep.not-include-in-emails-step1
+      - =>NSWDPC\SpamProtection\EditableTurnstileField.not-include-in-emails
+    EmailRecipients:
+      - =>SilverStripe\UserForms\Model\Recipient\EmailRecipient.recipient-not-include
