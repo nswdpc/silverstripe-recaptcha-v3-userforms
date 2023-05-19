@@ -74,6 +74,19 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     private static $table_name = 'EditableRecaptchaV3Field';
 
+
+    /**
+     * Used as fallback value for default, it specified value is not valid
+     * @var string
+    */
+    const DEFAULT_ACTION = 'submit';
+
+    /**
+     * Used as fallback value for default, it specified value is not valid
+     * @var int
+    */
+    const DEFAULT_THRESHOLD = 50;
+
     /**
      * The reCAPTCHA verification value is always stored
      * Use the IncludeInEmails value to determine whether the reCAPTCHA value is included in emails
@@ -139,9 +152,20 @@ class EditableRecaptchaV3Field extends EditableFormField
      * Get default threshold score as a float from configuration
      * @return int
      */
-    public function getDefaultThreshold()
+    public function getDefaultThreshold() : int
     {
-        return RecaptchaV3SpamProtector::getDefaultThreshold();
+        $threshold =  RecaptchaV3SpamProtector::getDefaultThreshold();
+        return is_int($threshold) ? $threshold : self::DEFAULT_THRESHOLD;
+    }
+
+    /**
+     * Get default threshold score as a float from configuration
+     * @return string
+     */
+    public function getDefaultAction() : string
+    {
+        $action = RecaptchaV3Field::config()->get('execute_action');
+        return is_string($action) && strlen($action) > 0 ? $action : self::DEFAULT_ACTION;
     }
 
     /**
@@ -230,12 +254,11 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     public function getFieldScore() : int
     {
-        if (!$this->exists()) {
-            $score = $this->getDefaultThreshold();
-        } else {
+        $score = null;
+        if ($this->exists()) {
             $score = $this->Score;
         }
-        return $score;
+        return is_int($score) ? $score : $this->getDefaultThreshold();
     }
 
     /**
@@ -244,12 +267,11 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     public function getFieldAction() : string
     {
-        if (!$this->exists()) {
-            $action = '';
-        } else {
+        $action = null;
+        if ($this->exists()) {
             $action = $this->Action;
         }
-        return $action;
+        return is_string($action) ? $action : $this->getDefaultAction();
     }
 
     /**
