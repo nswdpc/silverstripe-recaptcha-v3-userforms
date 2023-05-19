@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "nswdpc/silverstripe-recaptcha-v3": "^0.1 | ^0.2",
+        "nswdpc/silverstripe-recaptcha-v3": "^0.3",
         "silverstripe/userforms" : "^5"
     },
     "require-dev": {
