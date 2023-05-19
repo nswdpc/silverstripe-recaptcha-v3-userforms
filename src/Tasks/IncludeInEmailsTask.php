@@ -1,4 +1,5 @@
 <?php
+
 namespace NSWDPC\SpamProtection;
 
 use Silverstripe\Core\Config\Config;
@@ -39,20 +40,20 @@ class IncludeInEmailsTask extends BuildTask
     /**
      * @var string
      */
-    public function run($request) {
-
+    public function run($request)
+    {
         $before = $request->getVar('before');
         $publish = $request->getVar('publish') == 1;
         $commit = $request->getVar('commit') == 1;
 
-        if(!$commit) {
+        if (!$commit) {
             DB::alteration_message("Pass commit=1 to make changes", "info");
         }
-        if(!$publish) {
+        if (!$publish) {
             DB::alteration_message("Pass publish=1 to publish changes", "info");
         }
 
-        if(!$before) {
+        if (!$before) {
             DB::alteration_message("You must provide a date/time as the 'before' param, to update all fields before that date/time. The value is anything understood by DateTime", "error");
             return;
         }
@@ -60,7 +61,7 @@ class IncludeInEmailsTask extends BuildTask
         try {
             $dt = new \DateTime($before);
             $beforeFormatted = $dt->format('Y-m-d');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::alteration_message("Could not understand the before value '{$before}'", "error");
             return;
         }
@@ -69,18 +70,18 @@ class IncludeInEmailsTask extends BuildTask
             'Created:LessThan' => $beforeFormatted
         ]);
 
-        if($fields->count() == 0) {
+        if ($fields->count() == 0) {
             DB::alteration_message("No fields found to change before {$beforeFormatted}", "noop");
             return;
         }
 
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             try {
-                if($commit) {
+                if ($commit) {
                     $field->IncludeInEmails = 1;
                     $field->write();
                     DB::alteration_message("Changed field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
-                    if($publish) {
+                    if ($publish) {
                         $field->doPublish();
                         DB::alteration_message("Published field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
                     }
@@ -92,5 +93,4 @@ class IncludeInEmailsTask extends BuildTask
             }
         }
     }
-
 }
