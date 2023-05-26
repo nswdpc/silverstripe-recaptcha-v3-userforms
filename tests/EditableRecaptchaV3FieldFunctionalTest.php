@@ -133,7 +133,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
         $this->assertTrue(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertTrue(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertTrue(strpos($email['Content'], htmlspecialchars($value)) !== false, 'Email contains the field value');
     }
 
     /**
@@ -208,7 +208,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
         $this->assertFalse(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertFalse(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertFalse(strpos($email['Content'], htmlspecialchars($value)) !== false, 'Email contains the field value');
     }
 
 
@@ -311,7 +311,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
         $this->assertTrue(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertTrue(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertTrue(strpos($email['Content'], htmlspecialchars($value)) !== false, 'Email contains the field value');
     }
 
 
