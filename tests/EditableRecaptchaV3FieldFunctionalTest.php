@@ -253,7 +253,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $editableRecaptchaV3Field->RuleID = $rule->ID;
         $editableRecaptchaV3Field->write();
         $this->actWithPermission('ADMIN', function () use ($editableRecaptchaV3Field) {
-            $editableRecaptchaV3Field->doPublish();
+            $editableRecaptchaV3Field->publishSingle();
         });
 
         $checkRule = $editableRecaptchaV3Field->Rule();
@@ -356,7 +356,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $editableRecaptchaV3Field->RuleID = $rule->ID;
         $editableRecaptchaV3Field->write();
         $this->actWithPermission('ADMIN', function () use ($editableRecaptchaV3Field) {
-            $editableRecaptchaV3Field->doPublish();
+            $editableRecaptchaV3Field->publishSingle();
         });
 
         $checkRule = $editableRecaptchaV3Field->Rule();
