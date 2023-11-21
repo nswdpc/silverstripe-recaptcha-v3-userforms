@@ -389,4 +389,19 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertTrue(strpos($response->getBody(), RecaptchaV3Field::getMessagePossibleSpam()) !== false, "Message contains possible spam response");
     }
+
+
+    /**
+     * Test custom refresh time is in source
+     */
+    public function testMinRefreshTimeInSource()
+    {
+
+        $userDefinedForm = $this->setupFormFrontend('test-field-with-minrefreshtime');
+        $controller = new UserDefinedFormController($userDefinedForm);
+        $page = $this->get($userDefinedForm->Link());
+        $needle = "threshold = 11000;";
+        $this->assertStringContainsString($needle, $page->getBody());
+
+    }
 }

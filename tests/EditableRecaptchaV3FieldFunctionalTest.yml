@@ -42,6 +42,14 @@ NSWDPC\SpamProtection\EditableRecaptchaV3Field:
     Action: functionaltest/includeinemailswithrule
     # threshold score
     Score: 76
+  field-with-custom-refresh-time:
+    Name: field_with_rule
+    Title: Field with rule
+    IncludeInEmails: 1
+    Action: functionaltest/minrefreshtime
+    # threshold score
+    Score: 30
+    MinRefreshTime: 11
 
 SilverStripe\UserForms\Model\UserDefinedForm:
   include-in-emails:
@@ -68,3 +76,9 @@ SilverStripe\UserForms\Model\UserDefinedForm:
       - =>NSWDPC\SpamProtection\EditableRecaptchaV3Field.field-with-rule
     EmailRecipients:
       - =>SilverStripe\UserForms\Model\Recipient\EmailRecipient.recipient-include-rule
+  test-field-with-minrefreshtime:
+    Content: '<p>Form test: min refresh time</p>'
+    Title: 'Min refresh time test'
+    Fields:
+      - =>SilverStripe\UserForms\Model\EditableFormField\EditableFormStep.include-in-emails-step1
+      - =>NSWDPC\SpamProtection\EditableRecaptchaV3Field.field-with-custom-refresh-time

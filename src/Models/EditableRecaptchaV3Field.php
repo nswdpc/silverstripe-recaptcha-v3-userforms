@@ -6,6 +6,7 @@ use SilverStripe\Forms\CheckBoxField;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\NumericField;
 use SilverStripe\UserForms\Model\EditableFormField;
 use SilverStripe\Control\Controller;
 
@@ -39,7 +40,8 @@ class EditableRecaptchaV3Field extends EditableFormField
     private static $db = [
         'Score' => 'Int',// 0-100
         'Action' => 'Varchar(255)',// custom action
-        'IncludeInEmails' => 'Boolean'
+        'IncludeInEmails' => 'Boolean',
+        'MinRefreshTime' => 'Int' // in seconds
     ];
 
     /**
@@ -55,7 +57,8 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     private static $defaults = [
         'Action' => 'submit',
-        'IncludeInEmails' => 0
+        'IncludeInEmails' => 0,
+        'MinRefreshTime' => 30
     ];
 
     /**
@@ -140,6 +143,11 @@ class EditableRecaptchaV3Field extends EditableFormField
         if (!$this->Title) {
             $this->Title = _t('NSWDPC\SpamProtection.FORM_SPAM_PROTECTION', 'Form spam protection');
         }
+
+        if($this->MinRefreshTime <= 0) {
+            $this->MinRefreshTime = self::config()->get('defaults')['MinRefreshTime'];
+        }
+
     }
 
     public function onAfterWrite()
@@ -226,6 +234,20 @@ class EditableRecaptchaV3Field extends EditableFormField
                 )->setEmptyString(''),
                 $range_field,
                 RecaptchaV3SpamProtector::getActionField('Action', $this->Action),
+                NumericField::create(
+                    'MinRefreshTime',
+                    _t(
+                        'NSWDPC\SpamProtection.MINIMUM_REFRESH_TIME',
+                        'Minimum refresh time before a new captcha token is requested during form completion'
+                    )
+                )->setHtml5(true)
+                ->setAttribute('min', 0)
+                ->setDescription(
+                    _t(
+                        'NSWDPC\SpamProtection.UNIT_SECONDS',
+                        'In seconds'
+                    )
+                ),
                 CheckboxField::create(
                     'IncludeInEmails',
                     _t('NSWDPC\SpamProtection.INCLUDE_IN_EMAILS', 'Include form spam verification information in emails')
@@ -305,6 +327,9 @@ class EditableRecaptchaV3Field extends EditableFormField
             ->setTemplate($field_template);
         if ($rule) {
             $field = $field->setRecaptchaV3RuleTag($rule->Tag);
+        }
+        if($this->MinRefreshTime > 0) {
+            $field = $field->setMinRefreshTime($this->MinRefreshTime * 1000);
         }
         $this->doUpdateFormField($field);
         return $field;
