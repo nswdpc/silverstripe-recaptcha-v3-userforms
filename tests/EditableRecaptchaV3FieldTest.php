@@ -26,6 +26,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     public function testGetFormField()
     {
         $fieldScore = 32;
+        $minRefreshTime = 9;
         $fieldAction = "testgetformfield/submit";
 
         $field = EditableRecaptchaV3Field::create();
@@ -33,6 +34,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $field->IncludeInEmails = 0;
         $field->Score = $fieldScore;
         $field->Action = $fieldAction;
+        $field->MinRefreshTime = $minRefreshTime;
         $field->write();
 
         $formField = $field->getFormField();
@@ -50,6 +52,8 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
 
         $template = $formField->forTemplate()->RAW();
         $this->assertStringNotContainsString("data-rule=\"", $template);
+
+        $this->assertEquals( $minRefreshTime, ($formField->getMinRefreshTime() / 1000) );
     }
 
     /**
