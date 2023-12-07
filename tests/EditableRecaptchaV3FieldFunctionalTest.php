@@ -131,9 +131,9 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         // check emails
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
-        $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
-        $this->assertTrue(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertTrue(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
+        $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
+        $this->assertStringContainsString($value, $email['PlainContent'], 'Email contains the field value');
     }
 
     /**
@@ -206,9 +206,9 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         // check emails
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
-        $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
-        $this->assertFalse(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertFalse(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
+        $this->assertStringNotContainsString($title, $email['PlainContent'], 'Email contains the field name');
+        $this->assertStringNotContainsString($value, $email['PlainContent'], 'Email contains the field value');
     }
 
 
@@ -309,9 +309,9 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         // check emails
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
-        $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
-        $this->assertTrue(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertTrue(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
+        $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
+        $this->assertStringContainsString($value, $email['PlainContent'], 'Email contains the field value');
     }
 
 
@@ -387,6 +387,6 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         // Have to post with token value as submitForm does not allow HiddenField values to be set
         $response = $this->post($form->FormAction(), $data);
 
-        $this->assertTrue(strpos($response->getBody(), RecaptchaV3Field::getMessagePossibleSpam()) !== false, "Message contains possible spam response");
+        $this->assertStringContainsString(RecaptchaV3Field::getMessagePossibleSpam(), $response->getBody(), "Message contains possible spam response");
     }
 }
