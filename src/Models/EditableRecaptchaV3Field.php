@@ -170,9 +170,8 @@ class EditableRecaptchaV3Field extends EditableFormField
 
     /**
      * Return range of allowed thresholds
-     * @return array
      */
-    protected function getRange()
+    protected function getRange() : array
     {
         return RecaptchaV3SpamProtector::getRange();
     }
@@ -237,9 +236,8 @@ class EditableRecaptchaV3Field extends EditableFormField
 
     /**
      * Return the Rule, if enabled, or NULL if not
-     * @return RecaptchaV3Rule|null
      */
-    public function getEnabledRule()
+    public function getEnabledRule() : ?RecaptchaV3Rule
     {
         $rule = $this->Rule;
         if ($rule && $rule->exists() && $rule->Enabled) {

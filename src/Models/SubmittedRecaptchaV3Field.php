@@ -20,7 +20,7 @@ class SubmittedRecaptchaV3Field extends SubmittedFormField
     /**
      * Setter
      */
-    public function setIncludeValueInEmails(bool $include)
+    public function setIncludeValueInEmails(bool $include) : self
     {
         $this->includeValueInEmails = $include;
         return $this;
