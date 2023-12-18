@@ -47,14 +47,6 @@ class EditableTurnstileField extends EditableRecaptchaV3Field
 
     /**
      * Turnstile does not support a threshold setting
-     * @return int|null
-     */
-    public function getDefaultThreshold() : ?int {
-        return null;
-    }
-
-    /**
-     * Turnstile does not support a threshold setting
      * @return array
      */
     protected function getRange() : array {
