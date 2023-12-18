@@ -113,13 +113,6 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
-     * Format action string based on implementation rules
-     */
-    protected function formatCaptchaAction() : string {
-        return TurnstileTokenResponse::formatAction( $this->Action );
-    }
-
-    /**
      * Set captcha defaults based on implementation
      */
     protected function setCaptchaDefaults() : void {
@@ -133,7 +126,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         }
 
         // remove disallowed characters
-        $this->Action = $this->formatCaptchaAction();
+        $this->Action = RecaptchaV3TokenResponse::formatAction( $this->Action );
 
         /**
          * never require this field as it could cause weirdness with frontend validators
@@ -170,6 +163,22 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
+     * @deprecated use RecaptchaV3SpamProtector::getDefaultThreshold() instead
+     */
+    public function getDefaultThreshold() : int
+    {
+        return RecaptchaV3SpamProtector::getDefaultThreshold();
+    }
+
+    /**
+     * @deprecated use EditableRecaptchaV3Field::DEFAULT_ACTION
+     */
+    public function getDefaultAction() : string
+    {
+        return self::DEFAULT_ACTION;
+    }
+
+    /**
      * CMS Fields
      * @return FieldList
      */
@@ -188,7 +197,7 @@ class EditableRecaptchaV3Field extends EditableFormField
 
         // if there is no score yet, use the default
         if (is_null($this->Score) || $this->Score < 0 || $this->Score > 100) {
-            $this->Score = $this->getDefaultThreshold();
+            $this->Score = RecaptchaV3SpamProtector::getDefaultThreshold();
         }
         $range_field = RecaptchaV3SpamProtector::getRangeCompositeField('Score', $this->Score);
 
@@ -264,7 +273,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         if ($this->exists()) {
             $score = $this->Score;
         }
-        return is_int($score) ? $score : $this->getDefaultThreshold();
+        return is_int($score) ? $score : RecaptchaV3SpamProtector::getDefaultThreshold();
     }
 
     /**
@@ -277,7 +286,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         if ($this->exists()) {
             $action = $this->Action;
         }
-        return is_string($action) ? $action : $this->getDefaultAction();
+        return is_string($action) ? $action : self::DEFAULT_ACTION;
     }
 
     /**
