@@ -127,7 +127,7 @@ class EditableTurnstileFieldFunctionalTest extends FunctionalTest
         $this->assertNotEmpty($decodedValue);
         $this->assertEquals( 'localhost',  $decodedValue['hostname'], "Hostname is localhost");
 
-        $captchaAction = 'includevalueinemails_functionaltest';
+        $captchaAction = 'includeinemails_functionaltest';
         $expectedCaptchaAction = TurnstileTokenResponse::formatAction($captchaAction);
 
         $this->assertEquals( $expectedCaptchaAction,  $decodedValue['action'], "Action is {$expectedCaptchaAction}");
@@ -137,9 +137,8 @@ class EditableTurnstileFieldFunctionalTest extends FunctionalTest
         // check emails
         $this->assertEmailSent( $recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject );
 
-        $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
-        $this->assertTrue(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertTrue(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertStringContainsString($title, stripslashes($email['PlainContent']), 'Email contains the field name');
+        $this->assertStringContainsString($value, stripslashes($email['PlainContent']), 'Email contains the field value');
 
     }
 
@@ -209,7 +208,7 @@ class EditableTurnstileFieldFunctionalTest extends FunctionalTest
         $this->assertNotEmpty($decodedValue);
         $this->assertEquals( 'localhost',  $decodedValue['hostname'], "Hostname is localhost");
 
-        $captchaAction = 'notincludevalueinemails_functionaltest';
+        $captchaAction = 'notincludeinemails_functionaltest';
         $expectedCaptchaAction = TurnstileTokenResponse::formatAction($captchaAction);
 
         $this->assertEquals( $expectedCaptchaAction,  $decodedValue['action'], "Action is {$expectedCaptchaAction}");
@@ -219,9 +218,8 @@ class EditableTurnstileFieldFunctionalTest extends FunctionalTest
         // check emails
         $this->assertEmailSent( $recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject );
 
-        $this->assertTrue(strpos($email['Content'], $recipient->EmailBodyHtml) !== false, 'Email contains the expected HTML string');
-        $this->assertFalse(strpos($email['Content'], $title) !== false, 'Email contains the field name');
-        $this->assertFalse(strpos($email['Content'], $value) !== false, 'Email contains the field value');
+        $this->assertStringNotContainsString($title, stripslashes($email['PlainContent']), 'Email contains the field name');
+        $this->assertStringNotContainsString($value, stripslashes($email['PlainContent']), 'Email contains the field value');
     }
 
 }

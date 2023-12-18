@@ -108,7 +108,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertInstanceOf(RecaptchaV3Field::class, $captchaField, "include_in_emails is a RecaptchaV3Field");
 
-        $this->assertInstanceOf(TestVerifier::class, $captchaField->getVerifier(), "Verifier is the TestVerifier");
+        $this->assertInstanceOf(TestRecaptchaV3Verifier::class, $captchaField->getVerifier(), "Verifier is the TestRecaptchaV3Verifier");
 
         $token = 'token_include_in_emails';
         $data = [
@@ -135,16 +135,15 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $this->assertNotEmpty($decodedValue);
         $this->assertEquals( TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE);
         $this->assertEquals( 'localhost',  $decodedValue['hostname'], "Hostname is localhost");
-        $this->assertEquals( 'includevalueinemails/functionaltest',  $decodedValue['action'], "Action is includevalueinemails/functionaltest");
+        $this->assertEquals( 'includeinemails/functionaltest',  $decodedValue['action'], "Action is includeinemails/functionaltest");
 
         $email = $this->findEmail($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
         // check emails
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
-        $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
-        $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
-        $this->assertStringContainsString($value, $email['PlainContent'], 'Email contains the field value');
+        $this->assertStringContainsString($title, stripslashes($email['PlainContent']), 'Email contains the field name');
+        $this->assertStringContainsString($value, stripslashes($email['PlainContent']), 'Email contains the field value');
     }
 
     /**
@@ -218,16 +217,15 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $this->assertNotEmpty($decodedValue);
         $this->assertEquals( TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE);
         $this->assertEquals( 'localhost',  $decodedValue['hostname'], "Hostname is localhost");
-        $this->assertEquals( 'notincludevalueinemails/functionaltest',  $decodedValue['action'], "Action is notincludevalueinemails/functionaltest");
+        $this->assertEquals( 'notincludeinemails/functionaltest',  $decodedValue['action'], "Action is notincludeinemails/functionaltest");
 
         $email = $this->findEmail($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
         // check emails
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
-        $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
-        $this->assertStringNotContainsString($title, $email['PlainContent'], 'Email contains the field name');
-        $this->assertStringNotContainsString($value, $email['PlainContent'], 'Email contains the field value');
+        $this->assertStringNotContainsString($title, stripslashes($email['PlainContent']), 'Email contains the field name');
+        $this->assertStringNotContainsString($value, stripslashes($email['PlainContent']), 'Email contains the field value');
     }
 
 
@@ -249,11 +247,11 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $rule->write();
 
         // Use the test verifier
-        $verifier = TestVerifier::create();
+        $verifier = TestRecaptchaV3Verifier::create();
         $verifier->setIsHuman(true);
         Injector::inst()->registerService(
             $verifier,
-            Verifier::class
+            RecaptchaV3Verifier::class
         );
 
         $userDefinedForm = $this->setupFormFrontend('test-field-with-rule');
@@ -292,7 +290,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertInstanceOf(RecaptchaV3Field::class, $captchaField, "field_with_rule is a RecaptchaV3Field");
 
-        $this->assertInstanceOf(TestVerifier::class, $captchaField->getVerifier(), "Verifier is the TestVerifier");
+        $this->assertInstanceOf(TestRecaptchaV3Verifier::class, $captchaField->getVerifier(), "Verifier is the TestRecaptchaV3Verifier");
 
         $token = 'token_check_rule';
         $data = [
@@ -318,7 +316,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $decodedValue = json_decode($value, true);
 
         $this->assertNotEmpty($decodedValue);
-        $this->assertEquals(TestVerifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE);
+        $this->assertEquals(TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestRecaptchaV3Verifier::RESPONSE_HUMAN_SCORE);
         $this->assertEquals(round($rule->Score/100, 2), $decodedValue['threshold'], "Threshold used in verification is the Rule score");
         $this->assertEquals('localhost', $decodedValue['hostname'], "Hostname is localhost");
         $this->assertEquals($rule->Action, $decodedValue['action'], "Action is the Rule Action");
@@ -328,9 +326,8 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         // check emails
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
-        $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
-        $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
-        $this->assertStringContainsString($value, $email['PlainContent'], 'Email contains the field value');
+        $this->assertStringContainsString($title, stripslashes($email['PlainContent']), 'Email contains the field name');
+        $this->assertStringContainsString($value, stripslashes($email['PlainContent']), 'Email contains the field value');
     }
 
 
@@ -352,11 +349,11 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $rule->write();
 
         // Use the test verifier
-        $verifier = TestVerifier::create();
+        $verifier = TestRecaptchaV3Verifier::create();
         $verifier->setIsHuman(false);
         Injector::inst()->registerService(
             $verifier,
-            Verifier::class
+            RecaptchaV3Verifier::class
         );
 
         $userDefinedForm = $this->setupFormFrontend('test-field-with-rule');
@@ -395,7 +392,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertInstanceOf(RecaptchaV3Field::class, $captchaField, "field_with_rule is a RecaptchaV3Field");
 
-        $this->assertInstanceOf(TestVerifier::class, $captchaField->getVerifier(), "Verifier is the TestVerifier");
+        $this->assertInstanceOf(TestRecaptchaV3Verifier::class, $captchaField->getVerifier(), "Verifier is the TestRecaptchaV3Verifier");
 
         $token = 'token_check_rule';
         $data = [

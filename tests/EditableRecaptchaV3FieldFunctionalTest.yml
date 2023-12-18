@@ -4,17 +4,20 @@ SilverStripe\UserForms\Model\Recipient\EmailRecipient:
     EmailAddress: test.include@example.com
     EmailSubject: 'Include: test form submission for reCAPTCHAv3 test'
     EmailFrom: no-reply@example.com
-    EmailBodyHtml: 'INCLUDE_IN_EMAILS'
+    EmailBody: 'INCLUDE_IN_EMAILS'
+    SendPlain: 1
   recipient-not-include:
     EmailAddress: test.notinclude@example.com
     EmailSubject: 'Not include: test form submission for reCAPTCHAv3 test'
     EmailFrom: no-reply@example.com
-    EmailBodyHtml: 'NOT_INCLUDE_IN_EMAILS'
+    EmailBody: 'NOT_INCLUDE_IN_EMAILS'
+    SendPlain: 1
   recipient-include-rule:
     EmailAddress: test.include.rule@example.com
     EmailSubject: 'Include: test form submission for reCAPTCHAv3 test with rule'
     EmailFrom: no-reply@example.com
-    EmailBodyHtml: 'INCLUDE_IN_EMAILS_RULE'
+    EmailBody: 'INCLUDE_IN_EMAILS_RULE'
+    SendPlain: 1
 
 SilverStripe\UserForms\Model\EditableFormField\EditableFormStep:
   include-in-emails-step1:
@@ -25,13 +28,13 @@ SilverStripe\UserForms\Model\EditableFormField\EditableFormStep:
 NSWDPC\SpamProtection\EditableRecaptchaV3Field:
   include-in-emails:
     Name: include_in_emails
-    Title: Include value in emails
+    Title: Include in emails
     IncludeInEmails: 1
     Action: functionaltest
     Score: 70
   not-include-in-emails:
     Name: not_include_in_emails
-    Title: Not include value in emails
+    Title: Not include in emails
     IncludeInEmails: 0
     Action: functionaltest
     Score: 70
