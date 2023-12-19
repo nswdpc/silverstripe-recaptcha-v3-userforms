@@ -27,13 +27,13 @@ NSWDPC\SpamProtection\EditableRecaptchaV3Field:
     Name: include_in_emails
     Title: Include value in emails
     IncludeInEmails: 1
-    Action: functionaltest
+    Action: includeinemails/functionaltest
     Score: 70
   not-include-in-emails:
     Name: not_include_in_emails
     Title: Not include value in emails
     IncludeInEmails: 0
-    Action: functionaltest
+    Action: notincludeinemails/functionaltest
     Score: 70
   field-with-rule:
     Name: field_with_rule
