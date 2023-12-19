@@ -57,6 +57,38 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     }
 
     /**
+     * Test actions being returned from form field created
+     */
+    public function testActions()
+    {
+
+        $field = EditableRecaptchaV3Field::create();
+        $field->Title = "Test field action changes";
+
+        $actions = [
+            'test1' => 'test1',
+            'prefix/test1' => 'prefix/test1',
+            '/test1' => '/test1',
+            '1009' => '1009',
+            'prefix/1009' => 'prefix/1009',
+            'test2/' => 'test2/',
+            '0' => $field->getDefaultAction(),
+            1 => '1',
+            '' => $field->getDefaultAction(),
+            null => $field->getDefaultAction(),
+            'form=test1' => 'formtest1'
+        ];
+
+        foreach($actions as $action => $expectedFieldAction) {
+            $field->Action = $action;
+            $field->write();
+            $formField = $field->getFormField();
+            $fieldAction = $formField->getRecaptchaAction();
+            $this->assertEquals($expectedFieldAction, $fieldAction, "Action {$action} matches {$expectedFieldAction}");
+        }
+    }
+
+    /**
      * Test field return from getFormField when the field has a rule
      */
     public function testGetFormFieldWithRule()

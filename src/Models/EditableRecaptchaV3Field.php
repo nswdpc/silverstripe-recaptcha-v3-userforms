@@ -303,11 +303,6 @@ class EditableRecaptchaV3Field extends EditableFormField
 
         // rule for this field. If set, overrides Score/Action set
         $rule = $this->getEnabledRule();
-
-        $parent_form_identifier = "";
-        if (($parent = $this->Parent()) && !empty($parent->URLSegment)) {
-            $parent_form_identifier = $parent->URLSegment;
-        }
         $field_template = EditableRecaptchaV3Field::class;
         $field_holder_template = EditableRecaptchaV3Field::class . '_holder';
         // the score used as a threshold
@@ -315,9 +310,6 @@ class EditableRecaptchaV3Field extends EditableFormField
         $score = round(($score / 100), 2);
         // the action
         $action = $this->getFieldAction();
-        if (strpos($action, "/") === false) {
-            $action = $parent_form_identifier . "/" . $action;
-        }
         $field = RecaptchaV3Field::create($this->Name, $this->Title)
             ->setScore($score) // format for the reCAPTCHA API 0.00->1.00
             ->setExecuteAction($action, true)
