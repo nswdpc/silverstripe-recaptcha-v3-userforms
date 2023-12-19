@@ -87,6 +87,7 @@ class EditableRecaptchaV3Field extends EditableFormField
 
     /**
      * Used as fallback value for default, it specified value is not valid
+     * @deprecated use RecaptchaV3SpamProtector::DEFAULT_THRESHOLD instead
      * @var int
     */
     const DEFAULT_THRESHOLD = 50;
@@ -121,8 +122,8 @@ class EditableRecaptchaV3Field extends EditableFormField
         parent::onBeforeWrite();
 
         // use the default threshold score from config if the saved score is out of bounds
-        if (is_null($this->Score) || $this->Score < 0 || $this->Score > 100) {
-            $this->Score = $this->getDefaultThreshold();
+        if(!RecaptchaV3SpamProtector::isValidThreshold($this->Score)) {
+            $this->Score = RecaptchaV3SpamProtector::getDefaultThreshold();
         }
 
         if (TokenResponse::isEmptyAction($this->Action)) {
@@ -159,6 +160,7 @@ class EditableRecaptchaV3Field extends EditableFormField
 
     /**
      * Get default threshold score as a float from configuration
+     * @deprecated use RecaptchaV3SpamProtector::getDefaultThreshold()
      * @return int
      */
     public function getDefaultThreshold() : int
@@ -201,8 +203,8 @@ class EditableRecaptchaV3Field extends EditableFormField
         ]);
 
         // if there is no score yet, use the default
-        if (is_null($this->Score) || $this->Score < 0 || $this->Score > 100) {
-            $this->Score = $this->getDefaultThreshold();
+        if(!RecaptchaV3SpamProtector::isValidThreshold($this->Score)) {
+            $this->Score = RecaptchaV3SpamProtector::getDefaultThreshold();
         }
         $range_field = RecaptchaV3SpamProtector::getRangeCompositeField('Score', $this->Score);
 
@@ -278,7 +280,10 @@ class EditableRecaptchaV3Field extends EditableFormField
         if ($this->exists()) {
             $score = $this->Score;
         }
-        return is_int($score) ? $score : $this->getDefaultThreshold();
+        if(!RecaptchaV3SpamProtector::isValidThreshold($score)) {
+            $score = RecaptchaV3SpamProtector::getDefaultThreshold();
+        }
+        return $score;
     }
 
     /**
