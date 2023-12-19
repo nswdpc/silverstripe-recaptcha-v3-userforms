@@ -56,7 +56,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      * @var array
      */
     private static $defaults = [
-        'Action' => 'submit',
+        'Action' => '',
         'IncludeInEmails' => 0,
         'MinRefreshTime' => 30
     ];
@@ -81,6 +81,7 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * Used as fallback value for default, it specified value is not valid
      * @var string
+     * @deprecated see RecaptchaV3Field::DEFAULT_ACTION
     */
     const DEFAULT_ACTION = 'submit';
 
@@ -124,8 +125,8 @@ class EditableRecaptchaV3Field extends EditableFormField
             $this->Score = $this->getDefaultThreshold();
         }
 
-        if (!$this->Action) {
-            $this->Action = $this->config()->get('defaults')['Action'];
+        if (TokenResponse::isEmptyAction($this->Action)) {
+            $this->Action = RecaptchaV3Field::getDefaultAction();
         }
 
         // remove disallowed characters
@@ -167,13 +168,12 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
-     * Get default threshold score as a float from configuration
+     * @deprecated use RecaptchaV3Field::getDefaultAction()
      * @return string
      */
     public function getDefaultAction() : string
     {
-        $action = RecaptchaV3Field::config()->get('execute_action');
-        return is_string($action) && strlen($action) > 0 ? $action : self::DEFAULT_ACTION;
+        return RecaptchaV3Field::getDefaultAction();
     }
 
     /**
@@ -206,8 +206,8 @@ class EditableRecaptchaV3Field extends EditableFormField
         }
         $range_field = RecaptchaV3SpamProtector::getRangeCompositeField('Score', $this->Score);
 
-        if (!$this->Action) {
-            $this->Action = $this->config()->get('defaults')['Action'];
+        if (TokenResponse::isEmptyAction($this->Action)) {
+            $this->Action = RecaptchaV3Field::getDefaultAction();
         }
 
         $fields->findOrMakeTab(
@@ -282,16 +282,19 @@ class EditableRecaptchaV3Field extends EditableFormField
     }
 
     /**
-     * Return the action from either the Rule or the field here
+     * Return the action configured for this field, or the default action
      * @return string
      */
     public function getFieldAction() : string
     {
-        $action = null;
+        $action = '';
         if ($this->exists()) {
             $action = $this->Action;
         }
-        return is_string($action) ? $action : $this->getDefaultAction();
+        if(TokenResponse::isEmptyAction($action)) {
+            $action = RecaptchaV3Field::getDefaultAction();
+        }
+        return $action;
     }
 
     /**

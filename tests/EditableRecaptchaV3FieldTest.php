@@ -72,10 +72,10 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
             '1009' => '1009',
             'prefix/1009' => 'prefix/1009',
             'test2/' => 'test2/',
-            '0' => $field->getDefaultAction(),
+            '0' => RecaptchaV3Field::getDefaultAction(),
             1 => '1',
-            '' => $field->getDefaultAction(),
-            null => $field->getDefaultAction(),
+            '' => RecaptchaV3Field::getDefaultAction(),
+            null => RecaptchaV3Field::getDefaultAction(),
             'form=test1' => 'formtest1'
         ];
 
