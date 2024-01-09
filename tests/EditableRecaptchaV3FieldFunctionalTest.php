@@ -133,7 +133,8 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
         $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
-        $this->assertStringContainsString($value, $email['PlainContent'], 'Email contains the field value');
+        $needle = "\"score\":" . TestVerifier::RESPONSE_HUMAN_SCORE;
+        $this->assertStringContainsString($needle, $email['PlainContent'], 'Email contains the field value');
     }
 
     /**
@@ -207,8 +208,9 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $this->assertEmailSent($recipient->EmailAddress, $recipient->EmailReplyTo, $recipient->EmailSubject);
 
         $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
-        $this->assertStringNotContainsString($title, $email['PlainContent'], 'Email contains the field name');
-        $this->assertStringNotContainsString($value, $email['PlainContent'], 'Email contains the field value');
+        $this->assertStringNotContainsString($title, $email['PlainContent'], 'Email does not contain the field name');
+        $needle = "\"score\":" . TestVerifier::RESPONSE_HUMAN_SCORE;
+        $this->assertStringNotContainsString($needle, $email['PlainContent'], 'Email does not contain the field value');
     }
 
 
@@ -311,7 +313,8 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
         $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
-        $this->assertStringContainsString($value, $email['PlainContent'], 'Email contains the field value');
+        $needle = "\"score\":" . TestVerifier::RESPONSE_HUMAN_SCORE;
+        $this->assertStringContainsString($needle, $email['PlainContent'], 'Email contains the field value');
     }
 
 
