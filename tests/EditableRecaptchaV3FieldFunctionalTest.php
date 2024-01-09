@@ -400,7 +400,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $userDefinedForm = $this->setupFormFrontend('test-field-with-minrefreshtime');
         $controller = new UserDefinedFormController($userDefinedForm);
         $page = $this->get($userDefinedForm->Link());
-        $needle = "threshold = 11000;";
+        $needle = "\"threshold\":11000";
         $this->assertStringContainsString($needle, $page->getBody());
 
     }
