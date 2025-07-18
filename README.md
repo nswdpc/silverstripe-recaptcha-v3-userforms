@@ -1,6 +1,6 @@
 # Silverstripe reCAPTCHA v3 field for userforms
 
-This module provides a userforms reCAPTCHAv3 field with configurable action and score
+This module provides a [silverstripe/userforms](https://github.com/silverstripe/silverstripe-userforms) reCAPTCHAv3 field with configurable action and score.
 
 ![settings](./docs/settings.png)
 
@@ -8,7 +8,7 @@ This module provides a userforms reCAPTCHAv3 field with configurable action and 
 
 All configuration happens in the [nswdpc/silverstripe-recaptcha-v3](https://github.com/nswdpc/silverstripe-recaptcha-v3) module.
 
-Once a field is added to your user defined form, a score and action can be added to it.
+Once a field is added to your user form, a score and action can be added to it, or a rule selected.
 
 ## Requirements
 
@@ -36,6 +36,10 @@ composer require nswdpc/silverstripe-recaptcha-v3-userforms
 We welcome bug reports, pull requests and feature requests on the Github Issue tracker for this project.
 
 Please review the [code of conduct](./code-of-conduct.md) prior to opening a new issue.
+
+## Security
+
+If you have found a security issue with this module, please email digital[@]dpc.nsw.gov.au in the first instance, detailing your findings.
 
 ## Development and contribution
 
