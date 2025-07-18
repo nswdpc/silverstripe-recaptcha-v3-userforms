@@ -79,7 +79,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         ];
 
         foreach ($actions as $action => $expectedFieldAction) {
-            $field->Action = $action;
+            $field->Action = (string)$action;
             $field->write();
             $formField = $field->getFormField();
             $fieldAction = $formField->getRecaptchaAction();
