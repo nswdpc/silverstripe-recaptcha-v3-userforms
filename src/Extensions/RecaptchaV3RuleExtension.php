@@ -12,7 +12,7 @@ use SilverStripe\ORM\DataExtension;
  * @method \SilverStripe\ORM\HasManyList<\NSWDPC\SpamProtection\EditableRecaptchaV3Field> EditableRecaptchaV3Fields()
  * @extends \SilverStripe\ORM\DataExtension<(\NSWDPC\SpamProtection\RecaptchaV3Rule & static)>
  */
-class RecaptchaV3RuleExtension extends DataExtension
+class RecaptchaV3RuleExtension extends \SilverStripe\Core\Extension
 {
     private static array $has_many = [
         'EditableRecaptchaV3Fields' => EditableRecaptchaV3Field::class
