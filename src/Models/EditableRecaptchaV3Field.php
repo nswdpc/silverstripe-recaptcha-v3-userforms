@@ -2,7 +2,7 @@
 
 namespace NSWDPC\SpamProtection;
 
-use SilverStripe\Forms\CheckBoxField;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
@@ -165,8 +165,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      */
     public function getDefaultThreshold() : int
     {
-        $threshold =  RecaptchaV3SpamProtector::getDefaultThreshold();
-        return is_int($threshold) ? $threshold : self::DEFAULT_THRESHOLD;
+        return RecaptchaV3SpamProtector::getDefaultThreshold();
     }
 
     /**
@@ -186,10 +185,6 @@ class EditableRecaptchaV3Field extends EditableFormField
         return RecaptchaV3SpamProtector::getRange();
     }
 
-    /**
-     * CMS Fields
-     * @return FieldList
-     */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();

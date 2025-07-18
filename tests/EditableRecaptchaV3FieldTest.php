@@ -50,7 +50,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $rule = $formField->getRecaptchaV3Rule();
         $this->assertEmpty($rule, "No rule for field");
 
-        $template = $formField->forTemplate()->RAW();
+        $template = $formField->forTemplate();
         $this->assertStringNotContainsString("data-rule=\"", $template);
 
         $this->assertEquals( $minRefreshTime, ($formField->getMinRefreshTime() / 1000) );
@@ -133,7 +133,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $this->assertEquals($rule->ID, $foundRule->ID, "Rule matches");
 
 
-        $template = $formField->forTemplate()->RAW();
+        $template = $formField->forTemplate();
         $this->assertStringContainsString("data-rule=\"{$rule->ID}\"", $template);
     }
 
@@ -147,11 +147,13 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $field->IncludeInEmails = 1;
 
         $submittedField = $field->getSubmittedFormField();
+        $this->assertInstanceOf(SubmittedRecaptchaV3Field::class, $submittedField);
         $this->assertTrue($submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be true when IncludeInEmails=1");
 
         $field->IncludeInEmails = 0;
 
         $submittedField = $field->getSubmittedFormField();
+        $this->assertInstanceOf(SubmittedRecaptchaV3Field::class, $submittedField);
         $this->assertFalse($submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be false when IncludeInEmails=0");
     }
 }

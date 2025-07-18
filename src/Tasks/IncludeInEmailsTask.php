@@ -2,7 +2,7 @@
 
 namespace NSWDPC\SpamProtection;
 
-use Silverstripe\Core\Config\Config;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DB;
@@ -37,14 +37,11 @@ class IncludeInEmailsTask extends BuildTask
      */
     private static $segment = 'RecaptchaV3IncludeInEmailsTask';
 
-    /**
-     * @var string
-     */
     public function run($request)
     {
         $before = $request->getVar('before');
-        $publish = $request->getVar('publish') == 1;
-        $commit = $request->getVar('commit') == 1;
+        $publish = $request->getVar('publish') == '1';
+        $commit = $request->getVar('commit') == '1';
 
         if (!$commit) {
             DB::alteration_message("Pass commit=1 to make changes", "info");
@@ -82,7 +79,7 @@ class IncludeInEmailsTask extends BuildTask
                     $field->write();
                     DB::alteration_message("Changed field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
                     if ($publish) {
-                        $field->doPublish();
+                        $field->publishSingle();
                         DB::alteration_message("Published field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
                     }
                 } else {

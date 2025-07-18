@@ -31,7 +31,7 @@ class RecaptchaV3RuleExtension extends DataExtension
             _t("NSWDPC\SpamProtection.FIELD_USING_THIS_RULE", 'Fields using this rule'),
             $this->owner->EditableRecaptchaV3Fields()
         );
-        $config = new GridFieldConfig_RecordViewer();
+        $config = GridFieldConfig_RecordViewer::create();
         $field->setConfig($config);
 
         if ($field) {

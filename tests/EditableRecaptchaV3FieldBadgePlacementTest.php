@@ -31,7 +31,7 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_DEFAULT, $displayOption, "ShowRecaptchaV3Badge returned empty");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
         $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
 
@@ -48,7 +48,7 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_FIELD, $displayOption, "ShowRecaptchaV3Badge returned field setting");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
         $this->assertTrue(strpos($template, "https://policies.google.com/privacy") !== false, "Recaptcha policy link in template");
 
@@ -65,7 +65,7 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_FORM, $displayOption, "ShowRecaptchaV3Badge returned page setting");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
         $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
 
@@ -82,7 +82,7 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_PAGE, $displayOption, "ShowRecaptchaV3Badge returned page setting");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
         $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
 

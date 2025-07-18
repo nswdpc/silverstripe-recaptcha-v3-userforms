@@ -66,6 +66,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
     {
 
         // Use the test verifier
+        // @phpstan-ignore class.notFound
         $verifier = TestVerifier::create();
         $verifier->setIsHuman(true);
         Injector::inst()->registerService(
@@ -75,15 +76,18 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $userDefinedForm = $this->setupFormFrontend('include-in-emails');
 
+        // phpstan: method notation in UserDefinedForm class is incorrect, should be \SilverStripe\ORM\HasManyList
         $recipients = $userDefinedForm->EmailRecipients();
+        // @phpstan-ignore class.notFound
         $this->assertEquals(1, $recipients->count(), "UserDefinedForm has one EmailRecipient");
 
+        // @phpstan-ignore class.notFound
         $recipient = $recipients->first();
         $this->assertEquals('test.include@example.com', $recipient->EmailAddress, "EmailRecipient has correct address");
 
         $this->assertInstanceOf(UserDefinedForm::class, $userDefinedForm, "Form is a UserDefinedForm");
 
-        $controller = new UserDefinedFormController($userDefinedForm);
+        $controller = UserDefinedFormController::create($userDefinedForm);
 
         $this->autoFollowRedirection = true;
         $this->clearEmails();
@@ -97,6 +101,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertInstanceOf(RecaptchaV3Field::class, $captchaField, "include_in_emails is a RecaptchaV3Field");
 
+        // @phpstan-ignore class.notFound
         $this->assertInstanceOf(TestVerifier::class, $captchaField->getVerifier(), "Verifier is the TestVerifier");
 
         $token = 'token_include_in_emails';
@@ -122,7 +127,13 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $decodedValue = json_decode($value, true);
 
         $this->assertNotEmpty($decodedValue);
-        $this->assertEquals(TestVerifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE);
+        $this->assertEquals(
+            // @phpstan-ignore class.notFound
+            TestVerifier::RESPONSE_HUMAN_SCORE,
+            $decodedValue['score'],
+            // @phpstan-ignore class.notFound
+            "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE
+        );
         $this->assertEquals('localhost', $decodedValue['hostname'], "Hostname is localhost");
         $this->assertEquals('includeinemails/functionaltest', $decodedValue['action'], "Action is includeinemails/functionaltest");
 
@@ -133,6 +144,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
         $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
+        // @phpstan-ignore class.notFound
         $needle = "\"score\":" . TestVerifier::RESPONSE_HUMAN_SCORE;
         $this->assertStringContainsString($needle, $email['PlainContent'], 'Email contains the field value');
     }
@@ -144,6 +156,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
     {
 
         // and test verifier
+        // @phpstan-ignore class.notFound
         $verifier = TestVerifier::create();
         $verifier->setIsHuman(true);
         Injector::inst()->registerService(
@@ -154,14 +167,16 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $userDefinedForm = $this->setupFormFrontend('not-include-in-emails');
 
         $recipients = $userDefinedForm->EmailRecipients();
+        // @phpstan-ignore class.notFound
         $this->assertEquals(1, $recipients->count(), "UserDefinedForm has one EmailRecipient");
 
+        // @phpstan-ignore class.notFound
         $recipient = $recipients->first();
         $this->assertEquals('test.notinclude@example.com', $recipient->EmailAddress, "EmailRecipient has correct address");
 
         $this->assertInstanceOf(UserDefinedForm::class, $userDefinedForm, "Form is a UserDefinedForm");
 
-        $controller = new UserDefinedFormController($userDefinedForm);
+        $controller = UserDefinedFormController::create($userDefinedForm);
 
         $this->autoFollowRedirection = true;
         $this->clearEmails();
@@ -198,7 +213,13 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $decodedValue = json_decode($value, true);
 
         $this->assertNotEmpty($decodedValue);
-        $this->assertEquals(TestVerifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE);
+        $this->assertEquals(
+            // @phpstan-ignore class.notFound
+            TestVerifier::RESPONSE_HUMAN_SCORE,
+            $decodedValue['score'],
+            // @phpstan-ignore class.notFound
+            "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE
+        );
         $this->assertEquals('localhost', $decodedValue['hostname'], "Hostname is localhost");
         $this->assertEquals('notincludeinemails/functionaltest', $decodedValue['action'], "Action is notincludeinemails/functionaltest");
 
@@ -209,6 +230,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
         $this->assertStringNotContainsString($title, $email['PlainContent'], 'Email does not contain the field name');
+        // @phpstan-ignore class.notFound
         $needle = "\"score\":" . TestVerifier::RESPONSE_HUMAN_SCORE;
         $this->assertStringNotContainsString($needle, $email['PlainContent'], 'Email does not contain the field value');
     }
@@ -232,6 +254,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $rule->write();
 
         // Use the test verifier
+        // @phpstan-ignore class.notFound
         $verifier = TestVerifier::create();
         $verifier->setIsHuman(true);
         Injector::inst()->registerService(
@@ -242,8 +265,10 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $userDefinedForm = $this->setupFormFrontend('test-field-with-rule');
 
         $recipients = $userDefinedForm->EmailRecipients();
+        // @phpstan-ignore class.notFound
         $this->assertEquals(1, $recipients->count(), "UserDefinedForm has one EmailRecipient");
 
+        // @phpstan-ignore class.notFound
         $recipient = $recipients->first();
         $this->assertEquals('test.include.rule@example.com', $recipient->EmailAddress, "EmailRecipient has correct address");
 
@@ -261,7 +286,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $checkRule = $editableRecaptchaV3Field->Rule();
         $this->assertEquals($rule->ID, $checkRule->ID, "Rules match");
 
-        $controller = new UserDefinedFormController($userDefinedForm);
+        $controller = UserDefinedFormController::create($userDefinedForm);
 
         $this->autoFollowRedirection = true;
         $this->clearEmails();
@@ -275,6 +300,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertInstanceOf(RecaptchaV3Field::class, $captchaField, "field_with_rule is a RecaptchaV3Field");
 
+        // @phpstan-ignore class.notFound
         $this->assertInstanceOf(TestVerifier::class, $captchaField->getVerifier(), "Verifier is the TestVerifier");
 
         $token = 'token_check_rule';
@@ -301,7 +327,13 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $decodedValue = json_decode($value, true);
 
         $this->assertNotEmpty($decodedValue);
-        $this->assertEquals(TestVerifier::RESPONSE_HUMAN_SCORE, $decodedValue['score'], "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE);
+        $this->assertEquals(
+            // @phpstan-ignore class.notFound
+            TestVerifier::RESPONSE_HUMAN_SCORE,
+            $decodedValue['score'],
+            // @phpstan-ignore class.notFound
+            "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE
+        );
         $this->assertEquals(round($rule->Score/100, 2), $decodedValue['threshold'], "Threshold used in verification is the Rule score");
         $this->assertEquals('localhost', $decodedValue['hostname'], "Hostname is localhost");
         $this->assertEquals($rule->Action, $decodedValue['action'], "Action is the Rule Action");
@@ -313,6 +345,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertStringContainsString($recipient->EmailBodyHtml, $email['Content'], 'Email contains the expected HTML string');
         $this->assertStringContainsString($title, $email['PlainContent'], 'Email contains the field name');
+        // @phpstan-ignore class.notFound
         $needle = "\"score\":" . TestVerifier::RESPONSE_HUMAN_SCORE;
         $this->assertStringContainsString($needle, $email['PlainContent'], 'Email contains the field value');
     }
@@ -336,6 +369,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $rule->write();
 
         // Use the test verifier
+        // @phpstan-ignore class.notFound
         $verifier = TestVerifier::create();
         $verifier->setIsHuman(false);
         Injector::inst()->registerService(
@@ -346,8 +380,10 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $userDefinedForm = $this->setupFormFrontend('test-field-with-rule');
 
         $recipients = $userDefinedForm->EmailRecipients();
+        // @phpstan-ignore class.notFound
         $this->assertEquals(1, $recipients->count(), "UserDefinedForm has one EmailRecipient");
 
+        // @phpstan-ignore class.notFound
         $recipient = $recipients->first();
         $this->assertEquals('test.include.rule@example.com', $recipient->EmailAddress, "EmailRecipient has correct address");
 
@@ -365,7 +401,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
         $checkRule = $editableRecaptchaV3Field->Rule();
         $this->assertEquals($rule->ID, $checkRule->ID, "Rules match");
 
-        $controller = new UserDefinedFormController($userDefinedForm);
+        $controller = UserDefinedFormController::create($userDefinedForm);
 
         $this->autoFollowRedirection = true;
         $this->clearEmails();
@@ -379,6 +415,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 
         $this->assertInstanceOf(RecaptchaV3Field::class, $captchaField, "field_with_rule is a RecaptchaV3Field");
 
+        // @phpstan-ignore class.notFound
         $this->assertInstanceOf(TestVerifier::class, $captchaField->getVerifier(), "Verifier is the TestVerifier");
 
         $token = 'token_check_rule';
@@ -401,7 +438,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
     {
 
         $userDefinedForm = $this->setupFormFrontend('test-field-with-minrefreshtime');
-        $controller = new UserDefinedFormController($userDefinedForm);
+        $controller = UserDefinedFormController::create($userDefinedForm);
         $page = $this->get($userDefinedForm->Link());
         $needle = "\"threshold\":11000";
         $this->assertStringContainsString($needle, $page->getBody());

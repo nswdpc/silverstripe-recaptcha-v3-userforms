@@ -12,6 +12,8 @@ use SilverStripe\UserForms\Model\Submission\SubmittedFormField;
 class SubmittedRecaptchaV3Field extends SubmittedFormField
 {
 
+    private static string $table_name = "SubmittedRecaptchaV3Field";
+
     /**
      * @var bool
      */
