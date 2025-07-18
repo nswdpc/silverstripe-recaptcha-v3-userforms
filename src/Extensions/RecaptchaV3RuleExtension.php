@@ -9,7 +9,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
  * Extension to add EditableRecaptchaV3Fields to a rule
  * @author James
  * @method \SilverStripe\ORM\HasManyList<\NSWDPC\SpamProtection\EditableRecaptchaV3Field> EditableRecaptchaV3Fields()
- * @extends \SilverStripe\ORM\DataExtension<(\NSWDPC\SpamProtection\RecaptchaV3Rule & static)>
+ * @extends \SilverStripe\Core\Extension<(\NSWDPC\SpamProtection\RecaptchaV3Rule & static)>
  */
 class RecaptchaV3RuleExtension extends \SilverStripe\Core\Extension
 {
