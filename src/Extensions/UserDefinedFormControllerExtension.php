@@ -3,7 +3,6 @@
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Core\Extension;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\Control\Email\Email;
 
 /**

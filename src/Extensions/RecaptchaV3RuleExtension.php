@@ -4,7 +4,6 @@ namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
-use SilverStripe\ORM\DataExtension;
 
 /**
  * Extension to add EditableRecaptchaV3Fields to a rule
