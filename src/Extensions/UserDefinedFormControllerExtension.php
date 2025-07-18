@@ -3,7 +3,6 @@
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Core\Extension;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\Control\Email\Email;
 
 /**
@@ -20,7 +19,7 @@ class UserDefinedFormControllerExtension extends Extension
      */
     public function updateEmailData(&$emailData, $attachments)
     {
-        if (!isset($emailData['Fields']) || !($emailData['Fields'] instanceof ArrayList)) {
+        if (!isset($emailData['Fields']) || !($emailData['Fields'] instanceof \SilverStripe\Model\List\ArrayList)) {
             // invalid field data
             return;
         }

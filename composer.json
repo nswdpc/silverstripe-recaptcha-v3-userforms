@@ -18,14 +18,14 @@
         }
     ],
     "require": {
-        "nswdpc/silverstripe-recaptcha-v3": "^1",
-        "silverstripe/userforms": "^6"
+        "nswdpc/silverstripe-recaptcha-v3": "dev-ss6 as 2.0.9999",
+        "silverstripe/userforms": "^7"
     },
     "require-dev": {
         "cambis/silverstripe-rector": "^2",
         "cambis/silverstan": "^2",
         "friendsofphp/php-cs-fixer": "^3",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^11.5",
         "phpstan/phpstan": "^2",
         "rector/rector": "^2",
         "nswdpc/ci-files": "dev-v-4",
