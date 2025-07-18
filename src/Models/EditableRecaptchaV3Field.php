@@ -10,7 +10,7 @@ use SilverStripe\UserForms\Model\EditableFormField;
 /**
  * EditableRecaptchaV3Field
  * A field that adds reCAPTCHAv3 support to a user defined form
- * @author James <james.ellis@dpc.nsw.gov.au>
+ * @author James
  * @property int $Score
  * @property ?string $Action
  * @property bool $IncludeInEmails
