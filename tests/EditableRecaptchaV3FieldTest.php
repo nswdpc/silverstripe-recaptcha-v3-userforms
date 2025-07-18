@@ -23,7 +23,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field return from getFormField
      */
-    public function testGetFormField()
+    public function testGetFormField(): void
     {
         $fieldScore = 32;
         $minRefreshTime = 9;
@@ -51,7 +51,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $this->assertEmpty($rule, "No rule for field");
 
         $template = $formField->forTemplate();
-        $this->assertStringNotContainsString("data-rule=\"", $template);
+        $this->assertStringNotContainsString('data-rule="', $template);
 
         $this->assertEquals( $minRefreshTime, ($formField->getMinRefreshTime() / 1000) );
     }
@@ -59,7 +59,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test actions being returned from form field created
      */
-    public function testActions()
+    public function testActions(): void
     {
 
         $field = EditableRecaptchaV3Field::create();
@@ -91,7 +91,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field return from getFormField when the field has a rule
      */
-    public function testGetFormFieldWithRule()
+    public function testGetFormFieldWithRule(): void
     {
         $fieldScore = 32;
         $fieldAction = "testgetformfield/submit";
@@ -140,7 +140,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field value inclusion/exclusion
      */
-    public function testVerificationValue()
+    public function testVerificationValue(): void
     {
         $field = EditableRecaptchaV3Field::create();
         $field->Title = "Test spam protection";

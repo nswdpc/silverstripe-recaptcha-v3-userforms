@@ -9,14 +9,13 @@ use SilverStripe\ORM\DataExtension;
 /**
  * Extension to add EditableRecaptchaV3Fields to a rule
  * @author James
+ * @method \SilverStripe\ORM\HasManyList<\NSWDPC\SpamProtection\EditableRecaptchaV3Field> EditableRecaptchaV3Fields()
+ * @extends \SilverStripe\ORM\DataExtension<(\NSWDPC\SpamProtection\RecaptchaV3Rule & static)>
  */
 class RecaptchaV3RuleExtension extends DataExtension
 {
 
-    /**
-     * @var array
-     */
-    private static $has_many = [
+    private static array $has_many = [
         'EditableRecaptchaV3Fields' => EditableRecaptchaV3Field::class
     ];
 
@@ -29,7 +28,7 @@ class RecaptchaV3RuleExtension extends DataExtension
         $field = GridField::create(
             'EditableRecaptchaV3Fields',
             _t("NSWDPC\SpamProtection.FIELD_USING_THIS_RULE", 'Fields using this rule'),
-            $this->owner->EditableRecaptchaV3Fields()
+            $this->getOwner()->EditableRecaptchaV3Fields()
         );
         $config = GridFieldConfig_RecordViewer::create();
         $field->setConfig($config);

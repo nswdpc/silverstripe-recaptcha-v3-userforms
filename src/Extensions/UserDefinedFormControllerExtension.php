@@ -10,6 +10,7 @@ use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
 /**
  * Extension to handle email modification
  * @author James
+ * @extends \SilverStripe\Core\Extension<(\SilverStripe\UserForms\Control\UserDefinedFormController & static)>
  */
 class UserDefinedFormControllerExtension extends Extension
 {

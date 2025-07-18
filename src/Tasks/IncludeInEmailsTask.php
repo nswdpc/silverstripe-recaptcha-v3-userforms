@@ -32,10 +32,7 @@ class IncludeInEmailsTask extends BuildTask
      */
     protected $description = 'Retain the reCAPTCHAv3 verification values in emails sent. If you do not need the values in emails, do not run this task.';
 
-    /**
-     * @var string
-     */
-    private static $segment = 'RecaptchaV3IncludeInEmailsTask';
+    private static string $segment = 'RecaptchaV3IncludeInEmailsTask';
 
     public function run($request)
     {
@@ -46,6 +43,7 @@ class IncludeInEmailsTask extends BuildTask
         if (!$commit) {
             DB::alteration_message("Pass commit=1 to make changes", "info");
         }
+
         if (!$publish) {
             DB::alteration_message("Pass publish=1 to publish changes", "info");
         }
@@ -58,7 +56,7 @@ class IncludeInEmailsTask extends BuildTask
         try {
             $dt = new \DateTime($before);
             $beforeFormatted = $dt->format('Y-m-d');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             DB::alteration_message("Could not understand the before value '{$before}'", "error");
             return;
         }
