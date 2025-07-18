@@ -11,6 +11,7 @@ use SilverStripe\UserForms\Model\Submission\SubmittedFormField;
  */
 class SubmittedRecaptchaV3Field extends SubmittedFormField
 {
+    private static string $table_name = "SubmittedRecaptchaV3Field";
 
     /**
      * @var bool
@@ -20,7 +21,7 @@ class SubmittedRecaptchaV3Field extends SubmittedFormField
     /**
      * Setter
      */
-    public function setIncludeValueInEmails(bool $include) : self
+    public function setIncludeValueInEmails(bool $include): self
     {
         $this->includeValueInEmails = $include;
         return $this;
@@ -29,7 +30,7 @@ class SubmittedRecaptchaV3Field extends SubmittedFormField
     /**
      * Getter
      */
-    public function getIncludeValueInEmails() : bool
+    public function getIncludeValueInEmails(): bool
     {
         return $this->includeValueInEmails;
     }

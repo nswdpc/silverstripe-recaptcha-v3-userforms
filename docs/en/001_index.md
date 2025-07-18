@@ -2,7 +2,11 @@
 
 ## For CMS editors
 
-You can add two options to the reCAPTCHAv3 field when creating a form in the CMS:
+You can either select a rule or add custom settings to the field. A rule is a preset configuration that can be added to a field.
+
+### Rule
+
+Select a rule from the "Select an existing captcha rule" select field. The rule will take precedence over the threshold and custom action set for the field.
 
 ### Threshold
 
@@ -17,7 +21,11 @@ reCAPTCHA returns a score between 0 and 1 based on visitor interaction with the 
 
 This is a value used for analytics purposes in the [reCAPTCHA admin](https://www.google.com/recaptcha/admin/). You can use this to track scores per-form.
 
-### Including the reCAPTCHAv3 verification value in email
+## Minimum refresh time
+
+The captcha token will update based on user activity in the form every 30 seconds by default. You can set this to a higher or lower number, based on your requirements. Remember that a token has a lifetime of 2 minutes.
+
+## Including the reCAPTCHAv3 verification value in email
 
 Before v0.1.2, the reCAPTCHAv3 verification information for the submitted form was included in all emails:
 

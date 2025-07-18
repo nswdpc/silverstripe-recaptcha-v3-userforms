@@ -5,15 +5,14 @@ namespace NSWDPC\SpamProtection;
 use SilverStripe\Core\Extension;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Control\Email\Email;
-use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
 
 /**
  * Extension to handle email modification
  * @author James
+ * @extends \SilverStripe\Core\Extension<(\SilverStripe\UserForms\Control\UserDefinedFormController & static)>
  */
 class UserDefinedFormControllerExtension extends Extension
 {
-
     /**
      * Modify email data to take into account whether the reCAPTCHA value
      * is to be included in the list of fields added to the email for all

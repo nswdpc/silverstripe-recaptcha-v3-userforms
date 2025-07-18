@@ -2,9 +2,7 @@
 
 namespace NSWDPC\SpamProtection;
 
-use Silverstripe\Core\Config\Config;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DB;
 
 /**
@@ -21,7 +19,6 @@ use SilverStripe\ORM\DB;
  */
 class IncludeInEmailsTask extends BuildTask
 {
-
     /**
      * @inheritdoc
      */
@@ -32,23 +29,18 @@ class IncludeInEmailsTask extends BuildTask
      */
     protected $description = 'Retain the reCAPTCHAv3 verification values in emails sent. If you do not need the values in emails, do not run this task.';
 
-    /**
-     * @var string
-     */
-    private static $segment = 'RecaptchaV3IncludeInEmailsTask';
+    private static string $segment = 'RecaptchaV3IncludeInEmailsTask';
 
-    /**
-     * @var string
-     */
     public function run($request)
     {
         $before = $request->getVar('before');
-        $publish = $request->getVar('publish') == 1;
-        $commit = $request->getVar('commit') == 1;
+        $publish = $request->getVar('publish') == '1';
+        $commit = $request->getVar('commit') == '1';
 
         if (!$commit) {
             DB::alteration_message("Pass commit=1 to make changes", "info");
         }
+
         if (!$publish) {
             DB::alteration_message("Pass publish=1 to publish changes", "info");
         }
@@ -61,7 +53,7 @@ class IncludeInEmailsTask extends BuildTask
         try {
             $dt = new \DateTime($before);
             $beforeFormatted = $dt->format('Y-m-d');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             DB::alteration_message("Could not understand the before value '{$before}'", "error");
             return;
         }
@@ -82,7 +74,7 @@ class IncludeInEmailsTask extends BuildTask
                     $field->write();
                     DB::alteration_message("Changed field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
                     if ($publish) {
-                        $field->doPublish();
+                        $field->publishSingle();
                         DB::alteration_message("Published field #{$field->ID} '{$field->Title}', created:{$field->Created}", "changed");
                     }
                 } else {

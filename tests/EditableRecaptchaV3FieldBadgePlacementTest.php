@@ -13,13 +13,12 @@ use SilverStripe\Dev\SapphireTest;
  */
 class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
 {
-
     /**
      * @inheritdoc
      */
     protected $usesDatabase = false;
 
-    public function testDefaultBadgePlacement()
+    public function testDefaultBadgePlacement(): void
     {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_DEFAULT);
         $field = EditableRecaptchaV3Field::create([
@@ -31,14 +30,14 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_DEFAULT, $displayOption, "ShowRecaptchaV3Badge returned empty");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
+        $this->assertTrue(!str_contains($template, "https://policies.google.com/privacy"), "Recaptcha policy link not in template");
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
+        $this->assertTrue(!str_contains($template, "https://policies.google.com/terms"), "Recaptcha T&C link not in template");
     }
 
-    public function testFieldBadgePlacement()
+    public function testFieldBadgePlacement(): void
     {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_FIELD);
         $field = EditableRecaptchaV3Field::create([
@@ -48,14 +47,14 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_FIELD, $displayOption, "ShowRecaptchaV3Badge returned field setting");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") !== false, "Recaptcha policy link in template");
+        $this->assertTrue(str_contains($template, "https://policies.google.com/privacy"), "Recaptcha policy link in template");
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/terms") !== false, "Recaptcha T&C link in template");
+        $this->assertTrue(str_contains($template, "https://policies.google.com/terms"), "Recaptcha T&C link in template");
     }
 
-    public function testFormBadgePlacement()
+    public function testFormBadgePlacement(): void
     {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_FORM);
         $field = EditableRecaptchaV3Field::create([
@@ -65,14 +64,14 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_FORM, $displayOption, "ShowRecaptchaV3Badge returned page setting");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
+        $this->assertTrue(!str_contains($template, "https://policies.google.com/privacy"), "Recaptcha policy link not in template");
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
+        $this->assertTrue(!str_contains($template, "https://policies.google.com/terms"), "Recaptcha T&C link not in template");
     }
 
-    public function testPageBadgePlacement()
+    public function testPageBadgePlacement(): void
     {
         Config::modify()->set(RecaptchaV3SpamProtector::class, 'badge_display', RecaptchaV3SpamProtector::BADGE_DISPLAY_PAGE);
         $field = EditableRecaptchaV3Field::create([
@@ -82,10 +81,10 @@ class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
         $displayOption = RecaptchaV3SpamProtector::get_badge_display();
         $this->assertEquals(RecaptchaV3SpamProtector::BADGE_DISPLAY_PAGE, $displayOption, "ShowRecaptchaV3Badge returned page setting");
 
-        $template = $field->getFormField()->FieldHolder()->forTemplate();
+        $template = $field->getFormField()->FieldHolder();
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/privacy") === false, "Recaptcha policy link not in template");
+        $this->assertTrue(!str_contains($template, "https://policies.google.com/privacy"), "Recaptcha policy link not in template");
 
-        $this->assertTrue(strpos($template, "https://policies.google.com/terms") === false, "Recaptcha T&C link not in template");
+        $this->assertTrue(!str_contains($template, "https://policies.google.com/terms"), "Recaptcha T&C link not in template");
     }
 }

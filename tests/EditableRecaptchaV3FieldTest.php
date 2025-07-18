@@ -14,7 +14,6 @@ use SilverStripe\Dev\SapphireTest;
  */
 class EditableRecaptchaV3FieldTest extends SapphireTest
 {
-
     /**
      * @var bool
      */
@@ -23,7 +22,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field return from getFormField
      */
-    public function testGetFormField()
+    public function testGetFormField(): void
     {
         $fieldScore = 32;
         $minRefreshTime = 9;
@@ -50,16 +49,16 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $rule = $formField->getRecaptchaV3Rule();
         $this->assertEmpty($rule, "No rule for field");
 
-        $template = $formField->forTemplate()->RAW();
-        $this->assertStringNotContainsString("data-rule=\"", $template);
+        $template = $formField->forTemplate();
+        $this->assertStringNotContainsString('data-rule="', $template);
 
-        $this->assertEquals( $minRefreshTime, ($formField->getMinRefreshTime() / 1000) );
+        $this->assertEquals($minRefreshTime, ($formField->getMinRefreshTime() / 1000));
     }
 
     /**
      * Test actions being returned from form field created
      */
-    public function testActions()
+    public function testActions(): void
     {
 
         $field = EditableRecaptchaV3Field::create();
@@ -72,14 +71,14 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
             '1009' => '1009',
             'prefix/1009' => 'prefix/1009',
             'test2/' => 'test2/',
-            '0' => RecaptchaV3Field::getDefaultAction(),
+            '0' => '0',
             1 => '1',
             '' => RecaptchaV3Field::getDefaultAction(),
             null => RecaptchaV3Field::getDefaultAction(),
             'form=test1' => 'formtest1'
         ];
 
-        foreach($actions as $action => $expectedFieldAction) {
+        foreach ($actions as $action => $expectedFieldAction) {
             $field->Action = $action;
             $field->write();
             $formField = $field->getFormField();
@@ -91,7 +90,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
     /**
      * Test field return from getFormField when the field has a rule
      */
-    public function testGetFormFieldWithRule()
+    public function testGetFormFieldWithRule(): void
     {
         $fieldScore = 32;
         $fieldAction = "testgetformfield/submit";
@@ -133,25 +132,27 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $this->assertEquals($rule->ID, $foundRule->ID, "Rule matches");
 
 
-        $template = $formField->forTemplate()->RAW();
+        $template = $formField->forTemplate();
         $this->assertStringContainsString("data-rule=\"{$rule->ID}\"", $template);
     }
 
     /**
      * Test field value inclusion/exclusion
      */
-    public function testVerificationValue()
+    public function testVerificationValue(): void
     {
         $field = EditableRecaptchaV3Field::create();
         $field->Title = "Test spam protection";
         $field->IncludeInEmails = 1;
 
         $submittedField = $field->getSubmittedFormField();
+        $this->assertInstanceOf(SubmittedRecaptchaV3Field::class, $submittedField);
         $this->assertTrue($submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be true when IncludeInEmails=1");
 
         $field->IncludeInEmails = 0;
 
         $submittedField = $field->getSubmittedFormField();
+        $this->assertInstanceOf(SubmittedRecaptchaV3Field::class, $submittedField);
         $this->assertFalse($submittedField->getIncludeValueInEmails(), "getIncludeValueInEmails should be false when IncludeInEmails=0");
     }
 }
