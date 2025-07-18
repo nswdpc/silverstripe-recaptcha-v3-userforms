@@ -13,7 +13,6 @@ use SilverStripe\Dev\SapphireTest;
  */
 class EditableRecaptchaV3FieldBadgePlacementTest extends SapphireTest
 {
-
     /**
      * @inheritdoc
      */

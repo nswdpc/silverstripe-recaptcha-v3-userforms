@@ -14,7 +14,6 @@ use SilverStripe\ORM\DataExtension;
  */
 class RecaptchaV3RuleExtension extends DataExtension
 {
-
     private static array $has_many = [
         'EditableRecaptchaV3Fields' => EditableRecaptchaV3Field::class
     ];

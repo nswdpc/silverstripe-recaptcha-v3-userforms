@@ -2,9 +2,7 @@
 
 namespace NSWDPC\SpamProtection;
 
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DB;
 
 /**
@@ -21,7 +19,6 @@ use SilverStripe\ORM\DB;
  */
 class IncludeInEmailsTask extends BuildTask
 {
-
     /**
      * @inheritdoc
      */

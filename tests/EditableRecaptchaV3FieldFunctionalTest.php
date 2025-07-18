@@ -2,7 +2,6 @@
 
 namespace NSWDPC\SpamProtection\Tests;
 
-use NSWDPC\SpamProtection\Logger;
 use NSWDPC\SpamProtection\Verifier;
 use NSWDPC\SpamProtection\RecaptchaV3Field;
 use NSWDPC\SpamProtection\RecaptchaV3Rule;
@@ -11,7 +10,6 @@ use NSWDPC\SpamProtection\SubmittedRecaptchaV3Field;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\UserForms\Control\UserDefinedFormController;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\UserForms\Model\Recipient\EmailRecipient;
 use SilverStripe\UserForms\Model\UserDefinedForm;
 use SilverStripe\Security\SecurityToken;
 
@@ -21,7 +19,6 @@ use SilverStripe\Security\SecurityToken;
  */
 class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
 {
-
     /**
      * @var string
      */
@@ -334,7 +331,7 @@ class EditableRecaptchaV3FieldFunctionalTest extends FunctionalTest
             // @phpstan-ignore class.notFound
             "Score is " . TestVerifier::RESPONSE_HUMAN_SCORE
         );
-        $this->assertEquals(round($rule->Score/100, 2), $decodedValue['threshold'], "Threshold used in verification is the Rule score");
+        $this->assertEquals(round($rule->Score / 100, 2), $decodedValue['threshold'], "Threshold used in verification is the Rule score");
         $this->assertEquals('localhost', $decodedValue['hostname'], "Hostname is localhost");
         $this->assertEquals($rule->Action, $decodedValue['action'], "Action is the Rule Action");
 

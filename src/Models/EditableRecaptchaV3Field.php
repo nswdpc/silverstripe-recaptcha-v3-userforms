@@ -3,12 +3,9 @@
 namespace NSWDPC\SpamProtection;
 
 use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\CompositeField;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\UserForms\Model\EditableFormField;
-use SilverStripe\Control\Controller;
 
 /**
  * EditableRecaptchaV3Field
@@ -23,7 +20,6 @@ use SilverStripe\Control\Controller;
  */
 class EditableRecaptchaV3Field extends EditableFormField
 {
-
     private static string $singular_name = 'Captcha field';
 
     private static string $plural_name = 'Captcha fields';
@@ -73,14 +69,14 @@ class EditableRecaptchaV3Field extends EditableFormField
      * @var string
      * @deprecated see RecaptchaV3Field::DEFAULT_ACTION
     */
-    const DEFAULT_ACTION = 'submit';
+    public const DEFAULT_ACTION = 'submit';
 
     /**
      * Used as fallback value for default, it specified value is not valid
      * @deprecated use RecaptchaV3SpamProtector::DEFAULT_THRESHOLD instead
      * @var int
     */
-    const DEFAULT_THRESHOLD = 50;
+    public const DEFAULT_THRESHOLD = 50;
 
     /**
      * The reCAPTCHA verification value is always stored
@@ -115,7 +111,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         parent::onBeforeWrite();
 
         // use the default threshold score from config if the saved score is out of bounds
-        if(!RecaptchaV3SpamProtector::isValidThreshold($this->Score)) {
+        if (!RecaptchaV3SpamProtector::isValidThreshold($this->Score)) {
             $this->Score = RecaptchaV3SpamProtector::getDefaultThreshold();
         }
 
@@ -139,7 +135,7 @@ class EditableRecaptchaV3Field extends EditableFormField
             $this->Title = _t('NSWDPC\SpamProtection.FORM_SPAM_PROTECTION', 'Form spam protection');
         }
 
-        if($this->MinRefreshTime <= 0) {
+        if ($this->MinRefreshTime <= 0) {
             $this->MinRefreshTime = self::config()->get('defaults')['MinRefreshTime'];
         }
 
@@ -156,7 +152,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      * Get default threshold score as a float from configuration
      * @deprecated use RecaptchaV3SpamProtector::getDefaultThreshold()
      */
-    public function getDefaultThreshold() : int
+    public function getDefaultThreshold(): int
     {
         return RecaptchaV3SpamProtector::getDefaultThreshold();
     }
@@ -164,7 +160,7 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * @deprecated use RecaptchaV3Field::getDefaultAction()
      */
-    public function getDefaultAction() : string
+    public function getDefaultAction(): string
     {
         return RecaptchaV3Field::getDefaultAction();
     }
@@ -172,7 +168,7 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * Return range of allowed thresholds
      */
-    protected function getRange() : array
+    protected function getRange(): array
     {
         return RecaptchaV3SpamProtector::getRange();
     }
@@ -191,7 +187,7 @@ class EditableRecaptchaV3Field extends EditableFormField
         ]);
 
         // if there is no score yet, use the default
-        if(!RecaptchaV3SpamProtector::isValidThreshold($this->Score)) {
+        if (!RecaptchaV3SpamProtector::isValidThreshold($this->Score)) {
             $this->Score = RecaptchaV3SpamProtector::getDefaultThreshold();
         }
 
@@ -250,7 +246,7 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * Return the Rule, if enabled, or NULL if not
      */
-    public function getEnabledRule() : ?RecaptchaV3Rule
+    public function getEnabledRule(): ?RecaptchaV3Rule
     {
         $rule = $this->Rule;
         if ($rule && $rule->exists() && $rule->Enabled) {
@@ -263,14 +259,14 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * Return the threshold score from either the Rule or the field here
      */
-    public function getFieldScore() : int
+    public function getFieldScore(): int
     {
         $score = null;
         if ($this->exists()) {
             $score = $this->Score;
         }
 
-        if(!RecaptchaV3SpamProtector::isValidThreshold($score)) {
+        if (!RecaptchaV3SpamProtector::isValidThreshold($score)) {
             $score = RecaptchaV3SpamProtector::getDefaultThreshold();
         }
 
@@ -280,14 +276,14 @@ class EditableRecaptchaV3Field extends EditableFormField
     /**
      * Return the action configured for this field, or the default action
      */
-    public function getFieldAction() : string
+    public function getFieldAction(): string
     {
         $action = '';
         if ($this->exists()) {
             $action = $this->Action;
         }
 
-        if(TokenResponse::isEmptyAction($action)) {
+        if (TokenResponse::isEmptyAction($action)) {
             $action = RecaptchaV3Field::getDefaultAction();
         }
 
@@ -320,7 +316,7 @@ class EditableRecaptchaV3Field extends EditableFormField
             $field = $field->setRecaptchaV3RuleTag($rule->Tag);
         }
 
-        if($this->MinRefreshTime > 0) {
+        if ($this->MinRefreshTime > 0) {
             $field = $field->setMinRefreshTime($this->MinRefreshTime * 1000);
         }
 

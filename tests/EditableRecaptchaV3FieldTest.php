@@ -14,7 +14,6 @@ use SilverStripe\Dev\SapphireTest;
  */
 class EditableRecaptchaV3FieldTest extends SapphireTest
 {
-
     /**
      * @var bool
      */
@@ -53,7 +52,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
         $template = $formField->forTemplate();
         $this->assertStringNotContainsString('data-rule="', $template);
 
-        $this->assertEquals( $minRefreshTime, ($formField->getMinRefreshTime() / 1000) );
+        $this->assertEquals($minRefreshTime, ($formField->getMinRefreshTime() / 1000));
     }
 
     /**
@@ -79,7 +78,7 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
             'form=test1' => 'formtest1'
         ];
 
-        foreach($actions as $action => $expectedFieldAction) {
+        foreach ($actions as $action => $expectedFieldAction) {
             $field->Action = $action;
             $field->write();
             $formField = $field->getFormField();
