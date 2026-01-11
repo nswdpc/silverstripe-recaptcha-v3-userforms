@@ -32,7 +32,7 @@ class RecaptchaV3RuleExtension extends \SilverStripe\Core\Extension
         $field->setConfig($config);
 
         if ($field) {
-            $fields->addFieldsToTab(
+            $fields->addFieldToTab(
                 'Root.FormFields',
                 $field
             );
