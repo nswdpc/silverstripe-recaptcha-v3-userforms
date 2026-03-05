@@ -17,7 +17,7 @@ class UserDefinedFormControllerExtension extends Extension
      * is to be included in the list of fields added to the email for all
      * recipients
      */
-    public function updateEmailData(&$emailData, $attachments)
+    public function updateEmailData(array &$emailData, $attachments)
     {
         if (!isset($emailData['Fields']) || !($emailData['Fields'] instanceof \SilverStripe\Model\List\ArrayList)) {
             // invalid field data
