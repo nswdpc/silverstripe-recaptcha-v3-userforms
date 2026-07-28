@@ -74,7 +74,6 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
             '0' => '0',
             1 => '1',
             '' => RecaptchaV3Field::getDefaultAction(),
-            null => RecaptchaV3Field::getDefaultAction(),
             'form=test1' => 'formtest1'
         ];
 
