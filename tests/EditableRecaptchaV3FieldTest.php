@@ -74,12 +74,11 @@ class EditableRecaptchaV3FieldTest extends SapphireTest
             '0' => '0',
             1 => '1',
             '' => RecaptchaV3Field::getDefaultAction(),
-            null => RecaptchaV3Field::getDefaultAction(),
             'form=test1' => 'formtest1'
         ];
 
         foreach ($actions as $action => $expectedFieldAction) {
-            $field->Action = $action;
+            $field->Action = (string)$action;
             $field->write();
             $formField = $field->getFormField();
             $fieldAction = $formField->getRecaptchaAction();

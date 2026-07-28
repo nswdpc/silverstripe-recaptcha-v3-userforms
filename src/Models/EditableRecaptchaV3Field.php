@@ -329,7 +329,7 @@ class EditableRecaptchaV3Field extends EditableFormField
      * We don't need or want the token
      * @return string
      */
-    public function getValueFromData($data)
+    public function getValueFromData($data): string|false
     {
         // this is a new instance of the field
         $response = $this->getFormField()->getResponseFromSession();
